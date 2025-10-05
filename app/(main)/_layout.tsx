@@ -16,7 +16,7 @@ export default function Layout() {
                 headerShown: false
             }}
             />
-            {/* <Drawer.Screen
+            <Drawer.Screen
             name='profile'
             options={{
                 drawerLabel: 'Perfil',
@@ -37,7 +37,7 @@ export default function Layout() {
                 title: 'Configurações'
             }}
             />
-             */}
+            
             
         </Drawer>
     </GestureHandlerRootView>
