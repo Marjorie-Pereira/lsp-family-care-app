@@ -21,7 +21,7 @@ export default function Layout() {
         }}
       />
 
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="schedules"
         options={{
           title: "Agendas",
@@ -51,7 +51,7 @@ export default function Layout() {
                 <Ionicons name="medical-outline" size={size} color={color} />
             )
         }}
-      /> */}
+      />
 
     </Tabs>
   )
