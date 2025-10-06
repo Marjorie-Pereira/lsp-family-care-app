@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, Pressable, StatusBar, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import Mail from '../assets/icons/Mail';
 import ViewIcon from '../assets/icons/ViewIcon';

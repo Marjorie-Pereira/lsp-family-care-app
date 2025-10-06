@@ -26,6 +26,12 @@ const MainLayout = () => {
   }, [])
 
   return (
-    <Stack screenOptions={{headerShown: true}} />
+    // <Stack screenOptions={{headerShown: false}} />
+    <Stack>
+      <Stack.Screen name="welcome" options={{headerShown: false}} />
+      <Stack.Screen name="(main)" options={{headerShown: false}} />
+      <Stack.Screen name="login" options={{title: "Login"}} />
+      <Stack.Screen name="signUp" options={{title: "Cadastre-se"}} />
+    </Stack>
   )
 };

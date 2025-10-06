@@ -1,18 +1,21 @@
-import FloatingActionButton from '@/components/FloatingActionButton';
 import { theme } from '@/constants/theme';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Schedules() {
+export default function Index() {
+
+  const router = useRouter();
   
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   const isExpanded = useSharedValue(false);
 
   const handlePress = () => {
-    isExpanded.value = !isExpanded.value;
+    // isExpanded.value = !isExpanded.value;
+    router.push("/form")
   }
 
   const plusIconStyle = useAnimatedStyle(() => {
@@ -39,7 +42,7 @@ export default function Schedules() {
               +
             </Animated.Text>
           </AnimatedPressable>
-          <FloatingActionButton
+          {/* <FloatingActionButton
             isExpanded={isExpanded}
             index={1}
             buttonLetter={'M'}
@@ -53,7 +56,7 @@ export default function Schedules() {
             isExpanded={isExpanded}
             index={3}
             buttonLetter={'S'}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>
@@ -80,7 +83,7 @@ const mainButtonStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'relative',
-    height: 260,
+    height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-end',
@@ -91,6 +94,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    right: 20,
+    bottom: 0
   },
   shadow: {
     shadowColor: '#171717',

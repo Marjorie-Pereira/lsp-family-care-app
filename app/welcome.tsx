@@ -3,6 +3,7 @@ import ScreenWrapper from '@/components/ScreenWrapper';
 import { theme } from '@/constants/theme';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 const Welcome = () => {
   const router = useRouter();

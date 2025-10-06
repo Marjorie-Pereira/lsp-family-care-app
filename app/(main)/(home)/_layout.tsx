@@ -22,7 +22,7 @@ export default function Layout() {
       />
 
       <Tabs.Screen
-        name="schedules"
+        name="(schedules)"
         options={{
           title: "Agendas",
             tabBarLabel: "Agendas",
