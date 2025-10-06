@@ -2,7 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Button, Image, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function FormScreen() {
+export default function EditForm() {
   const [nome, setNome] = useState('');
   const [titular, setTitular] = useState('');
   const [image, setImage] = useState("");

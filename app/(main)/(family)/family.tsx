@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
 
