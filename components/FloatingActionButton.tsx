@@ -1,6 +1,7 @@
 import { theme } from "@/constants/theme";
 import { Pressable, StyleSheet } from "react-native";
 import Animated, {
+  SharedValue,
   useAnimatedStyle,
   withDelay,
   withSpring,
@@ -17,13 +18,20 @@ const OFFSET = 60;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const FloatingActionButton = ({ isExpanded, index, buttonLetter, onPress }: any) => {
+type floatingActionButtonProps = {
+  isExpanded: SharedValue<boolean>
+  index: number
+  buttonLetter: string
+  onPress: () => void
+}
+
+const FloatingActionButton = ({ isExpanded, index, buttonLetter, onPress }: floatingActionButtonProps) => {
   const animatedStyles = useAnimatedStyle(() => {
     const moveValue = isExpanded.value ? OFFSET * index : 0;
     const translateValue = withSpring(-moveValue, SPRING_CONFIG);
     const delay = index * 100;
 
-    const scaleValue = isExpanded.value ? 1 : 0;
+    const scaleValue = isExpanded.value ? 1 : 0.0001;
 
     return {
       transform: [
@@ -65,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: 'center',
-    zIndex: -2,
+    zIndex: 1,
     flexDirection: "row",
   },
 });

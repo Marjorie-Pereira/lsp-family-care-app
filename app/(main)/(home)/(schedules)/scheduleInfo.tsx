@@ -2,13 +2,24 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 import { theme } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+    FlatList,
+    Pressable,
+    StyleSheet,
+    Text,
+    View
+} from "react-native";
 import {
     CalendarProvider,
     LocaleConfig,
     WeekCalendar,
 } from "react-native-calendars";
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
 
 export default function ScheduleInfo() {
   const router = useRouter();
@@ -65,29 +76,27 @@ export default function ScheduleInfo() {
   };
 
   const eventosDoDia = eventos[selected] || [];
-  
-  
-  
-   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-  
-    const isExpanded = useSharedValue(false);
-  
-    const handlePress = () => {
-      isExpanded.value = !isExpanded.value;
+
+  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+  const isExpanded = useSharedValue(false);
+
+  const handlePress = () => {
+    isExpanded.value = !isExpanded.value;
+  };
+
+  const plusIconStyle = useAnimatedStyle(() => {
+    const moveValue = interpolate(Number(isExpanded.value), [0, 1], [0, 2]);
+    const translateValue = withTiming(moveValue);
+    const rotateValue = isExpanded.value ? "45deg" : "0deg";
+
+    return {
+      transform: [
+        { translateX: translateValue },
+        { rotate: withTiming(rotateValue) },
+      ],
     };
-  
-    const plusIconStyle = useAnimatedStyle(() => {
-      const moveValue = interpolate(Number(isExpanded.value), [0, 1], [0, 2]);
-      const translateValue = withTiming(moveValue);
-      const rotateValue = isExpanded.value ? "45deg" : "0deg";
-  
-      return {
-        transform: [
-          { translateX: translateValue },
-          { rotate: withTiming(rotateValue) },
-        ],
-      };
-    });
+  });
 
   return (
     <CalendarProvider
@@ -95,22 +104,20 @@ export default function ScheduleInfo() {
       onDateChanged={setSelected}
       showTodayButton
       theme={{
-        todayButtonTextColor: theme.colors.primary
+        todayButtonTextColor: theme.colors.primary,
       }}
-      
     >
       <View style={styles.container}>
         <WeekCalendar
           markedDates={{
             [selected]: { selected: true, selectedColor: theme.colors.primary },
           }}
-          firstDay={1} 
+          firstDay={1}
           theme={{
             todayTextColor: theme.colors.primary,
           }}
         />
 
-        
         <Text style={styles.titulo}>
           Eventos de {new Date(selected).toLocaleDateString("pt-BR")}
         </Text>
@@ -127,26 +134,23 @@ export default function ScheduleInfo() {
             <Text style={styles.semEventos}>Nenhum evento neste dia</Text>
           }
         />
-
-        <View style={styles.buttonContainer}>
-                  <AnimatedPressable
-                    onPress={handlePress}
-                    style={[styles.shadow, mainButtonStyles.button]}
-                  >
-                    <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
-                      +
-                    </Animated.Text>
-                  </AnimatedPressable>
-                  <FloatingActionButton
-                    isExpanded={isExpanded}
-                    index={1}
-                    buttonLetter={'Novo evento'}
-                    onPress={() => router.push("/eventForm")}
-                  />
-                  
-                  
-                </View>
       </View>
+      <View style={styles.buttonContainer}>
+          <AnimatedPressable
+            onPress={handlePress}
+            style={[styles.shadow, mainButtonStyles.button]}
+          >
+            <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
+              +
+            </Animated.Text>
+          </AnimatedPressable>
+          <FloatingActionButton
+            isExpanded={isExpanded}
+            index={1}
+            buttonLetter={"Novo evento"}
+            onPress={() => router.push("/eventForm")}
+          />
+        </View>
     </CalendarProvider>
   );
 }
