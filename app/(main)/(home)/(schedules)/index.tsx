@@ -44,17 +44,22 @@ export default function Index() {
     <SafeAreaView>
       <View style={styles.mainContainer}>
         {/* Schedules containers */}
-        <View style={{ marginHorizontal: 16, marginBottom: 10, width: '100%' }}>
-          <ImageBackground
-            source={{ uri: "https://picsum.photos/200/300" }} // use sua imagem aqui
-            resizeMode="cover"
-            style={styles.backgroundImage}
-            imageStyle={styles.imageStyle}
+        <Pressable onPress={() => router.push("/scheduleInfo")} style={{ marginHorizontal: 16, marginBottom: 10, width: "100%" }}>
+          <View
+            
           >
-            <Text style={styles.texto}>Agenda do Fulano</Text>
-          </ImageBackground>
-        </View>
-        <View style={{ marginHorizontal: 16, width: '100%' }}>
+            <ImageBackground
+              source={{ uri: "https://picsum.photos/200/300" }} // use sua imagem aqui
+              resizeMode="cover"
+              style={styles.backgroundImage}
+              imageStyle={styles.imageStyle}
+            >
+              <Text style={styles.texto}>Agenda do Fulano</Text>
+            </ImageBackground>
+          </View>
+        </Pressable>
+
+        <View style={{ marginHorizontal: 16, width: "100%" }}>
           <ImageBackground
             source={{ uri: "https://picsum.photos/200/300" }} // use sua imagem aqui
             resizeMode="cover"
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     borderRadius: 12,
     overflow: "hidden",
-    marginLeft: 18
+    marginLeft: 18,
   },
   imageStyle: {
     borderRadius: 12, // arredondamento aplicado na imagem

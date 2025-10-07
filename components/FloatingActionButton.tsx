@@ -1,5 +1,4 @@
 import { theme } from "@/constants/theme";
-import React from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -18,7 +17,7 @@ const OFFSET = 60;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-const FloatingActionButton = ({ isExpanded, index, buttonLetter }: any) => {
+const FloatingActionButton = ({ isExpanded, index, buttonLetter, onPress }: any) => {
   const animatedStyles = useAnimatedStyle(() => {
     const moveValue = isExpanded.value ? OFFSET * index : 0;
     const translateValue = withSpring(-moveValue, SPRING_CONFIG);
@@ -37,7 +36,7 @@ const FloatingActionButton = ({ isExpanded, index, buttonLetter }: any) => {
   });
 
   return (
-    <AnimatedPressable style={[animatedStyles, styles.shadow, styles.button]}>
+    <AnimatedPressable style={[animatedStyles, styles.shadow, styles.button]} onPress={onPress}>
       <Animated.Text style={styles.content}>{buttonLetter}</Animated.Text>
     </AnimatedPressable>
   );
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
   content: {
     color: theme.colors.primary,
     fontWeight: 500,
+    textAlign: 'center'
   },
   shadow: {
     shadowColor: "#171717",
@@ -55,14 +55,16 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   button: {
-    width: 40,
+    width: 80,
     height: 40,
-    backgroundColor: "#82cab2",
+    padding: 3,
+    backgroundColor: "white",
     position: "absolute",
     borderRadius: 100,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    textAlign: 'center',
     zIndex: -2,
     flexDirection: "row",
   },
