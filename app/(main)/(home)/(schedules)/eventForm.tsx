@@ -1,15 +1,9 @@
-import Button from '@/components/Button';
-import { theme } from '@/constants/theme';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import Button from "@/components/Button";
+import { theme } from "@/constants/theme";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
 
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function EventForm() {
   const [name, setName] = useState("");
@@ -20,9 +14,8 @@ export default function EventForm() {
     alert("Formulário criado!");
   };
 
-
   const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
+  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event: any, selectedDate: any) => {
@@ -37,65 +30,78 @@ export default function EventForm() {
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
   const showTimepicker = () => {
-    showMode('time');
+    showMode("time");
   };
 
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Nome:</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Digite o nome"
-        placeholderTextColor={theme.colors.placeholder}
-      />
-
-      <Button onPress={showDatepicker} title="Show date picker!" buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
-      <Button onPress={showTimepicker} title="Show time picker!" buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
-      <Text style={styles.label}>Data e Hora Selecionadas:</Text>
-      <View style={styles.dateDisplay}>
-        <Text style={styles.dateDisplayText}>{date.toLocaleString()}</Text>
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode as any}
-          is24Hour={true}
-          onChange={onChange}
+    <>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.label}>Nome:</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Digite o nome"
+          placeholderTextColor={theme.colors.placeholder}
         />
-      )}
 
-      <Button title="Criar Evento" onPress={handleCreateEvent} buttonStyle={[styles.button, styles.buttonPrimary]} textStyle={styles.buttonPrimaryText} />
-    </ScrollView>
+        <Button
+          onPress={showDatepicker}
+          title="Show date picker!"
+          buttonStyle={[styles.button, styles.buttonSecondary]}
+          textStyle={styles.buttonSecondaryText}
+        />
+        <Button
+          onPress={showTimepicker}
+          title="Show time picker!"
+          buttonStyle={[styles.button, styles.buttonSecondary]}
+          textStyle={styles.buttonSecondaryText}
+        />
+        <Text style={styles.label}>Data e Hora Selecionadas:</Text>
+        <View style={styles.dateDisplay}>
+          <Text style={styles.dateDisplayText}>{date.toLocaleString()}</Text>
+        </View>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode as any}
+            is24Hour={true}
+            onChange={onChange}
+          />
+        )}
+
+        <Button
+          title="Criar Evento"
+          onPress={handleCreateEvent}
+          buttonStyle={[styles.button, styles.buttonPrimary]}
+          textStyle={styles.buttonPrimaryText}
+        />
+      </ScrollView>
+    </>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 24,
     backgroundColor: theme.colors.white,
-    gap: 16, 
+    gap: 16,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: theme.colors.textPrimary,
     marginBottom: 8,
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: theme.colors.textSecondary,
   },
   input: {
@@ -108,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.lightGrey,
     color: theme.colors.textPrimary,
   },
-  
+
   dateDisplay: {
     borderWidth: 1,
     borderColor: theme.colors.border,
@@ -116,19 +122,19 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: theme.colors.lightGrey,
-    minHeight: 48, 
-    justifyContent: 'center', 
+    minHeight: 48,
+    justifyContent: "center",
   },
-  
+
   dateDisplayText: {
     fontSize: 16,
-    color: theme.colors.textPrimary, 
+    color: theme.colors.textPrimary,
   },
   button: {
     borderRadius: 10,
     paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonPrimary: {
     backgroundColor: theme.colors.primary,
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
   buttonPrimaryText: {
     color: theme.colors.white,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   buttonSecondary: {
     backgroundColor: theme.colors.lightGrey,
@@ -144,6 +150,6 @@ const styles = StyleSheet.create({
   buttonSecondaryText: {
     color: theme.colors.primary,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

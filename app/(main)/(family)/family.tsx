@@ -22,26 +22,34 @@ export default function Family() {
   }, familyMembers);
 
   return (
-    <View style={styles.container}>
-      <Text>Membros da família</Text>
-      <Button title="Novo" onPress={() => router.push("/modal")} />
-      <ScrollView>
-        <View style={styles.itemsList}>
-          {
-            familyMembers.map((member, index) => {
-              
+    <>
+      <View style={styles.container}>
+        <Text>Membros da família</Text>
+        <Button title="Novo" onPress={() => router.push("/modal")} />
+        <ScrollView>
+          <View style={styles.itemsList}>
+            {familyMembers.map((member, index) => {
               return (
-              <Pressable key={index} onPress={() => router.push({pathname: '/familyMemberInfo', params: {...member}})}>
-                <View style={styles.listItem}>
-                  <Text>{member.name}</Text>
-                  <Text>{member.relation_type}</Text>
-                </View>
-              </Pressable>
-            )})
-          }
-        </View>
-      </ScrollView>
-    </View>
+                <Pressable
+                  key={index}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/familyMemberInfo",
+                      params: { ...member },
+                    })
+                  }
+                >
+                  <View style={styles.listItem}>
+                    <Text>{member.name}</Text>
+                    <Text>{member.relation_type}</Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
@@ -61,10 +69,10 @@ const styles = StyleSheet.create({
     shadowColor: theme.colors.textPrimary,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius:3.8,
-    elevation: 3
+    shadowRadius: 3.8,
+    elevation: 3,
   },
 });
