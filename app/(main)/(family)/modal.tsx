@@ -5,7 +5,7 @@ import { theme } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { Picker } from '@react-native-picker/picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
 export default function Modal() {
@@ -60,7 +60,7 @@ export default function Modal() {
   return (
     <ScreenWrapper>
         <View style={styles.container}>
-            <Text style={{fontSize: 20, color: theme.colors.text}}>
+            <Text style={{fontSize: 20, color: theme.colors.textPrimary}}>
                 Preencha os campos com as informações necessárias do familiar
             </Text>
 

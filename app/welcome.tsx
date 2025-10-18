@@ -3,7 +3,6 @@ import ScreenWrapper from '@/components/ScreenWrapper';
 import { theme } from '@/constants/theme';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 const Welcome = () => {
   const router = useRouter();
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   title: {
-    color: theme.colors.text,
+    color: theme.colors.textPrimary,
     fontSize: 32,
     textAlign: 'center',
     fontWeight: "800"
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 10,
     fontSize: 16,
-    color: theme.colors.text
+    color: theme.colors.textPrimary
   },
   footer: {
     gap: 30,
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     textAlign: 'center',
-    color: theme.colors.text,
+    color: theme.colors.textPrimary,
     fontSize: 12
   }
 })

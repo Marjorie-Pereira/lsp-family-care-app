@@ -1,13 +1,14 @@
 import Button from "@/components/Button";
 import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { familyMemberType } from "@/types/familyMember.type";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
 
 export default function Family() {
-  const [familyMembers, setFamilyMembers] = useState([]) as any[];
+  const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
   const fetchFamilyMembers = async () => {
     const { data, error } = await supabase.from("FamilyMembers").select("*");
 
@@ -18,7 +19,7 @@ export default function Family() {
   const router = useRouter();
   useEffect(() => {
     fetchFamilyMembers();
-  }, []);
+  }, familyMembers);
 
   return (
     <View style={styles.container}>
@@ -27,10 +28,10 @@ export default function Family() {
       <ScrollView>
         <View style={styles.itemsList}>
           {
-            familyMembers.map((member: any) => {
-              const key = familyMembers.indexOf(member)
+            familyMembers.map((member, index) => {
+              
               return (
-              <Pressable key={key} onPress={() => router.push({pathname: '/familyMemberInfo', params: {...member}})}>
+              <Pressable key={index} onPress={() => router.push({pathname: '/familyMemberInfo', params: {...member}})}>
                 <View style={styles.listItem}>
                   <Text>{member.name}</Text>
                   <Text>{member.relation_type}</Text>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   listItem: {
     borderRadius: 5,
     padding: 16,
-    shadowColor: theme.colors.text,
+    shadowColor: theme.colors.textPrimary,
     shadowOffset: {
       width: 0,
       height: 2
