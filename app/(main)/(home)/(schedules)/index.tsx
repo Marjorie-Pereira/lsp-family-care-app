@@ -1,5 +1,7 @@
 import { theme } from "@/constants/theme";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   ImageBackground,
   Pressable,
@@ -27,6 +29,18 @@ export default function Index() {
     router.push("/form");
   };
 
+  const [schedules, setSchedules] = useState([]) as any[];
+  const fetchSchedules = async () => {
+    const { data, error } = await supabase.from("Schedules").select("*");
+
+    if (error) console.error(error);
+    else setSchedules(data);
+  };
+
+  useEffect(() => {
+    fetchSchedules();
+  }, schedules);
+
   const plusIconStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(Number(isExpanded.value), [0, 1], [0, 2]);
     const translateValue = withTiming(moveValue);
@@ -44,31 +58,30 @@ export default function Index() {
     <SafeAreaView>
       <View style={styles.mainContainer}>
         {/* Schedules containers */}
-        <Pressable onPress={() => router.push("/scheduleInfo")} style={{ marginHorizontal: 16, marginBottom: 10, width: "100%" }}>
-          <View
-            
-          >
-            <ImageBackground
-              source={{ uri: "https://picsum.photos/200/300" }} // use sua imagem aqui
-              resizeMode="cover"
-              style={styles.backgroundImage}
-              imageStyle={styles.imageStyle}
+        {schedules.map((item: any, index: number) => {
+          return (
+            <Pressable
+              key={index}
+              onPress={() =>
+                router.push({ pathname: "/scheduleInfo", params: { ...item } })
+              }
+              style={{ marginHorizontal: 16, marginBottom: 10, width: "100%" }}
             >
-              <Text style={styles.texto}>Agenda do Fulano</Text>
-            </ImageBackground>
-          </View>
-        </Pressable>
-
-        <View style={{ marginHorizontal: 16, width: "100%" }}>
-          <ImageBackground
-            source={{ uri: "https://picsum.photos/200/300" }} // use sua imagem aqui
-            resizeMode="cover"
-            style={styles.backgroundImage}
-            imageStyle={styles.imageStyle}
-          >
-            <Text style={styles.texto}>Agenda do Ciclano</Text>
-          </ImageBackground>
-        </View>
+              <View>
+                <ImageBackground
+                  source={{ uri: item.imageUrl }}
+                  resizeMode="cover"
+                  style={styles.backgroundImage}
+                  imageStyle={styles.imageStyle}
+                >
+                  <Text style={styles.texto}>
+                    Agenda do {item.familyMember.nome}
+                  </Text>
+                </ImageBackground>
+              </View>
+            </Pressable>
+          );
+        })}
 
         {/* Nova agenda button */}
         <View style={styles.buttonContainer}>
@@ -80,21 +93,6 @@ export default function Index() {
               +
             </Animated.Text>
           </AnimatedPressable>
-          {/* <FloatingActionButton
-            isExpanded={isExpanded}
-            index={1}
-            buttonLetter={'M'}
-          />
-          <FloatingActionButton
-            isExpanded={isExpanded}
-            index={2}
-            buttonLetter={'W'}
-          />
-          <FloatingActionButton
-            isExpanded={isExpanded}
-            index={3}
-            buttonLetter={'S'}
-          /> */}
         </View>
       </View>
     </SafeAreaView>
