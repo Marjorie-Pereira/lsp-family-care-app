@@ -1,5 +1,6 @@
 import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { scheduleType } from "@/types/scheduleType.type";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -29,7 +30,7 @@ export default function Index() {
     router.push("/form");
   };
 
-  const [schedules, setSchedules] = useState([]) as any[];
+  const [schedules, setSchedules] = useState<scheduleType[]>([]);
   const fetchSchedules = async () => {
     const { data, error } = await supabase.from("Schedules").select("*");
 
@@ -58,12 +59,13 @@ export default function Index() {
     <SafeAreaView>
       <View style={styles.mainContainer}>
         {/* Schedules containers */}
-        {schedules.map((item: any, index: number) => {
+        {schedules.map((item, index: number) => {
+          const scheduleJson = JSON.stringify(item)
           return (
             <Pressable
               key={index}
               onPress={() =>
-                router.push({ pathname: "/scheduleInfo", params: { ...item } })
+                router.push({ pathname: "/scheduleInfo", params: {scheduleJson} })
               }
               style={{ marginHorizontal: 16, marginBottom: 10, width: "100%" }}
             >
@@ -75,7 +77,7 @@ export default function Index() {
                   imageStyle={styles.imageStyle}
                 >
                   <Text style={styles.texto}>
-                    Agenda do {item.familyMember.nome}
+                    {item.title}
                   </Text>
                 </ImageBackground>
               </View>
