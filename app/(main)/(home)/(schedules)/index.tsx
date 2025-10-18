@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -20,17 +21,29 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
+  const [schedules, setSchedules] = useState<scheduleType[]>([]);
+  const [data, setData] = useState(schedules);
+  const [inSelectionMode, setInSelectionMode] = useState(false);
+  
+  
+  const [selectedItems, setSelectedItems] = useState(new Set());
+  
+ 
+  const handleLongPress = (id: string) => {
+    setInSelectionMode(true);
+  
+    setSelectedItems(prevSelected => new Set(prevSelected).add(id));
+  };
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   const isExpanded = useSharedValue(false);
 
   const handlePress = () => {
-    // isExpanded.value = !isExpanded.value;
     router.push("/form");
   };
 
-  const [schedules, setSchedules] = useState<scheduleType[]>([]);
+  
   const fetchSchedules = async () => {
     const { data, error } = await supabase.from("Schedules").select("*");
 
@@ -40,7 +53,7 @@ export default function Index() {
 
   useEffect(() => {
     fetchSchedules();
-  }, schedules);
+  }, [schedules]);
 
   const plusIconStyle = useAnimatedStyle(() => {
     const moveValue = interpolate(Number(isExpanded.value), [0, 1], [0, 2]);
@@ -56,48 +69,59 @@ export default function Index() {
   });
 
   return (
-    <SafeAreaView>
-      <View style={styles.mainContainer}>
-        {/* Schedules containers */}
-        {schedules.map((item, index: number) => {
-          const scheduleJson = JSON.stringify(item)
-          return (
-            <Pressable
-              key={index}
-              onPress={() =>
-                router.push({ pathname: "/scheduleInfo", params: {scheduleJson} })
-              }
-              style={{ marginHorizontal: 16, marginBottom: 10, width: "100%" }}
-            >
-              <View>
-                <ImageBackground
-                  source={{ uri: item.imageUrl }}
-                  resizeMode="cover"
-                  style={styles.backgroundImage}
-                  imageStyle={styles.imageStyle}
+    <>
+      <ScrollView>
+        <SafeAreaView>
+          <View style={styles.mainContainer}>
+            {/* Schedules containers */}
+            {schedules.map((item, index: number) => {
+              const scheduleJson = JSON.stringify(item);
+              return (
+                <Pressable
+                  key={index}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/scheduleInfo",
+                      params: { scheduleJson },
+                    })
+                  }
+                  style={{
+                    marginHorizontal: 16,
+                    marginBottom: 10,
+                    width: "100%",
+                  }}
                 >
-                  <Text style={styles.texto}>
-                    {item.title}
-                  </Text>
-                </ImageBackground>
-              </View>
-            </Pressable>
-          );
-        })}
+                  <View>
+                    <ImageBackground
+                      source={{ uri: item.imageUrl }}
+                      resizeMode="cover"
+                      style={styles.backgroundImage}
+                      imageStyle={styles.imageStyle}
+                    >
+                      <Text style={styles.texto}>{item.title}</Text>
+                    </ImageBackground>
+                  </View>
+                </Pressable>
+              );
+            })}
 
-        {/* Nova agenda button */}
-        <View style={styles.buttonContainer}>
-          <AnimatedPressable
-            onPress={handlePress}
-            style={[styles.shadow, mainButtonStyles.button]}
-          >
-            <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
-              +
-            </Animated.Text>
-          </AnimatedPressable>
-        </View>
-      </View>
-    </SafeAreaView>
+            {/* Nova agenda button */}
+            <View style={styles.buttonContainer}>
+              <AnimatedPressable
+                onPress={handlePress}
+                style={[styles.shadow, mainButtonStyles.button]}
+              >
+                <Animated.Text
+                  style={[plusIconStyle, mainButtonStyles.content]}
+                >
+                  +
+                </Animated.Text>
+              </AnimatedPressable>
+            </View>
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </>
   );
 }
 

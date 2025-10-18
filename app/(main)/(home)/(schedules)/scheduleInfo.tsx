@@ -2,23 +2,17 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 import { theme } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import {
-    FlatList,
-    Pressable,
-    StyleSheet,
-    Text,
-    View
-} from "react-native";
-import {
-    CalendarProvider,
-    LocaleConfig,
-    WeekCalendar,
+  CalendarProvider,
+  LocaleConfig,
+  WeekCalendar,
 } from "react-native-calendars";
 import Animated, {
-    interpolate,
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 export default function ScheduleInfo() {
@@ -99,43 +93,47 @@ export default function ScheduleInfo() {
   });
 
   return (
-    <CalendarProvider
-      date={selected}
-      onDateChanged={setSelected}
-      showTodayButton
-      theme={{
-        todayButtonTextColor: theme.colors.primary,
-      }}
-    >
-      <View style={styles.container}>
-        <WeekCalendar
-          markedDates={{
-            [selected]: { selected: true, selectedColor: theme.colors.primary },
-          }}
-          firstDay={1}
-          theme={{
-            todayTextColor: theme.colors.primary,
-          }}
-        />
+    <>
+      <CalendarProvider
+        date={selected}
+        onDateChanged={setSelected}
+        showTodayButton
+        theme={{
+          todayButtonTextColor: theme.colors.primary,
+        }}
+      >
+        <View style={styles.container}>
+          <WeekCalendar
+            markedDates={{
+              [selected]: {
+                selected: true,
+                selectedColor: theme.colors.primary,
+              },
+            }}
+            firstDay={1}
+            theme={{
+              todayTextColor: theme.colors.primary,
+            }}
+          />
 
-        <Text style={styles.titulo}>
-          Eventos de {new Date(selected).toLocaleDateString("pt-BR")}
-        </Text>
+          <Text style={styles.titulo}>
+            Eventos de {new Date(selected).toLocaleDateString("pt-BR")}
+          </Text>
 
-        <FlatList
-          data={eventosDoDia}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.evento}>
-              <Text style={styles.eventoTexto}>{item.title}</Text>
-            </View>
-          )}
-          ListEmptyComponent={
-            <Text style={styles.semEventos}>Nenhum evento neste dia</Text>
-          }
-        />
-      </View>
-      <View style={styles.buttonContainer}>
+          <FlatList
+            data={eventosDoDia}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.evento}>
+                <Text style={styles.eventoTexto}>{item.title}</Text>
+              </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.semEventos}>Nenhum evento neste dia</Text>
+            }
+          />
+        </View>
+        <View style={styles.buttonContainer}>
           <AnimatedPressable
             onPress={handlePress}
             style={[styles.shadow, mainButtonStyles.button]}
@@ -151,7 +149,8 @@ export default function ScheduleInfo() {
             onPress={() => router.push("/eventForm")}
           />
         </View>
-    </CalendarProvider>
+      </CalendarProvider>
+    </>
   );
 }
 

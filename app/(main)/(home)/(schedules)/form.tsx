@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { familyMemberType } from "@/types/familyMember.type";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -17,10 +18,18 @@ import {
 
 export default function FormScreen() {
   const titleRef = useRef("");
-  const imageRef = useRef("");
-  const familyMemberRef = useRef({});
   const [image, setImage] = useState("");
-  const [familyMember, setFamilyMember] = useState<familyMemberType>();
+   const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
+  const [familyMemberId, setFamilyMemberId] = useState(familyMembers[0]?.id);
+  const router = useRouter();
+
+ 
+  const fetchFamilyMembers = async () => {
+    const { data, error } = await supabase.from("FamilyMembers").select("*");
+
+    if (error) console.error(error);
+    else setFamilyMembers(data);
+  };
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -40,7 +49,7 @@ export default function FormScreen() {
   };
 
   const handleShare = async () => {
-    if (!titleRef.current && !familyMember && !image) {
+    if (!titleRef.current && !familyMemberId && !image) {
       Alert.alert(
         "Nada para compartilhar",
         "Preencha os campos ou escolha uma imagem."
@@ -48,8 +57,9 @@ export default function FormScreen() {
       return;
     }
     try {
+      const scheduleOwner = familyMembers.find((m) => m.id === familyMemberId)?.name
       await Share.share({
-        message: `Nome: ${titleRef.current}\nTitular: ${familyMember}`,
+        message: `Nome: ${titleRef.current}\nTitular: ${scheduleOwner}`,
         url: image,
       });
     } catch (error: any) {
@@ -59,81 +69,78 @@ export default function FormScreen() {
 
   const handleCreate = async () => {
     let title = titleRef.current.trim();
-    let image = imageRef.current.trim();
-    let familyMember = familyMemberRef.current;
+    
 
     const { data, error } = await supabase
       .from("Schedules")
-      .insert({ title, iamgeUrl: image, familyMember });
+      .insert({ title, imageUrl: image, family_member_id: familyMemberId });
 
     if (error) {
       Alert.alert("Erro ao criar uma agenda", error.message);
+      console.error(error)
     } else {
       Alert.alert("Agenda criada!", "Novo agenda adicionado com sucesso");
+      console.log("data from form", data)
       // @ts-ignore
-      router.navigate("index", data);
+      router.navigate("/(main)/(home)/(schedules)", data);
     }
   };
 
-  const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
-  const fetchFamilyMembers = async () => {
-    const { data, error } = await supabase.from("FamilyMembers").select("*");
-
-    if (error) console.error(error);
-    else setFamilyMembers(data);
-  };
+  
 
   useEffect(() => {
     fetchFamilyMembers();
-  })
+  }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Título:</Text>
-      <TextInput
-        style={styles.input}
-        value={titleRef.current}
-        onChangeText={(value: string) => (titleRef.current = value)}
-        placeholder="Título da agenda"
-        placeholderTextColor="#999"
-      />
+    <>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.label}>Título:</Text>
+        <TextInput
+          style={styles.input}
+          // value={titleRef.current}
+          onChangeText={(value: string) => (titleRef.current = value)}
+          placeholder="Título da agenda"
+          placeholderTextColor="#999"
+        />
 
-      <Text style={styles.label}>Familiar associado:</Text>
-      <Picker
-        selectedValue={familyMember}
-        onValueChange={(itemValue, itemIndex) => {
-          setFamilyMember(itemValue);
-        }}
-      >
-        {familyMembers.map((member, index) => {
-          return (
-            <Picker.Item label={member.name} value={member.name} key={index} />
-          );
-        })}
-      </Picker>
+        <Text style={styles.label}>Familiar associado:</Text>
+        <Picker
+          onValueChange={(itemValue: string) => {
+            setFamilyMemberId(itemValue);
+            
+          }}
+        >
+          {familyMembers.map((member, index) => {
+            return (
+              <Picker.Item label={member.name} value={member.id} key={index} />
+            );
+          })}
+        </Picker>
 
-      <Button
-        title="Escolher Foto"
-        onPress={pickImage}
-        buttonStyle={[styles.button, styles.buttonSecondary]}
-        textStyle={styles.buttonSecondaryText}
-      />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+        <Button
+          title="Escolher Foto"
+          onPress={pickImage}
+          buttonStyle={[styles.button, styles.buttonSecondary]}
+          textStyle={styles.buttonSecondaryText}
+        />
+        {image && <Image source={{ uri: image }} style={styles.image} />}
 
-      <Button
-        title="Compartilhar com..."
-        onPress={handleShare}
-        buttonStyle={[styles.button, styles.buttonSecondary]}
-        textStyle={styles.buttonSecondaryText}
-      />
+        <Button
+          title="Compartilhar com..."
+          onPress={handleShare}
+          buttonStyle={[styles.button, styles.buttonSecondary]}
+          textStyle={styles.buttonSecondaryText}
+        />
 
-      <Button
-        title="Criar"
-        onPress={handleCreate}
-        buttonStyle={[styles.button, styles.buttonPrimary]}
-        textStyle={styles.buttonPrimaryText}
-      />
-    </ScrollView>
+        <Button
+          title="Criar"
+          onPress={handleCreate}
+          buttonStyle={[styles.button, styles.buttonPrimary]}
+          textStyle={styles.buttonPrimaryText}
+        />
+      </ScrollView>
+    </>
   );
 }
 
