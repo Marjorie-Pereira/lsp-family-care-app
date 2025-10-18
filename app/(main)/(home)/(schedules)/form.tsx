@@ -1,6 +1,8 @@
+import Button from '@/components/Button';
+import { theme } from '@/constants/theme';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Button, Image, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, ScrollView, Share, StyleSheet, Text, TextInput } from 'react-native';
 
 export default function FormScreen() {
   const [nome, setNome] = useState('');
@@ -10,7 +12,7 @@ export default function FormScreen() {
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      alert('Permissão para acessar as fotos é necessária!');
+      Alert.alert('Permissão para acessar as fotos é necessária!');
       return;
     }
 
@@ -25,6 +27,10 @@ export default function FormScreen() {
   };
 
   const handleShare = async () => {
+    if (!nome && !titular && !image) {
+      Alert.alert('Nada para compartilhar', 'Preencha os campos ou escolha uma imagem.');
+      return;
+    }
     try {
       await Share.share({
         message: `Nome: ${nome}\nTitular: ${titular}`,
@@ -36,66 +42,97 @@ export default function FormScreen() {
   };
 
   const handleCriar = () => {
-    // Aqui você pode processar o envio do formulário
-    alert('Formulário criado!');
+    
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Nome:</Text>
+      <Text style={styles.label}>Título:</Text>
       <TextInput
         style={styles.input}
         value={nome}
         onChangeText={setNome}
-        placeholder="Digite o nome"
+        placeholder="Título da agenda"
+        placeholderTextColor="#999"
       />
 
-      <Text style={styles.label}>Titular:</Text>
+{/* modal de seleção do familiar */}
+      <Text style={styles.label}>Familiar associado:</Text>
       <TextInput
         style={styles.input}
         value={titular}
         onChangeText={setTitular}
-        placeholder="Digite o titular"
+        placeholder="Nome do familiar"
+        placeholderTextColor="#999"
       />
 
-      <Button title="Escolher Foto" onPress={pickImage} />
+      <Button title="Escolher Foto" onPress={pickImage} buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
       {image && <Image source={{ uri: image }} style={styles.image} />}
 
-      <View style={styles.buttonSpacing}>
-        <Button title="Compartilhar com..." onPress={handleShare} />
-      </View>
+      <Button title="Compartilhar com..." onPress={handleShare} buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
 
-      <View style={styles.buttonSpacing}>
-        <Button title="Criar" onPress={handleCriar} />
-      </View>
+      <Button title="Criar" onPress={handleCriar} buttonStyle={[styles.button, styles.buttonPrimary]} textStyle={styles.buttonPrimaryText} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#fff',
-    flexGrow: 1,
+    flexGrow: 1, 
+    padding: 24, 
+    backgroundColor: theme.colors.white,
+    gap: 16, 
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: theme.colors.textPrimary,
+    marginBottom: 8,
   },
   label: {
     fontSize: 16,
-    marginTop: 15,
+    fontWeight: '600', 
+    color: theme.colors.textPrimary,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 5,
+    borderColor: theme.colors.lightGrey,
+    borderRadius: 10, 
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    backgroundColor: theme.colors.lightGrey, 
+    color: theme.colors.textPrimary,
   },
   image: {
     width: '100%',
-    height: 200,
-    marginTop: 15,
+    height: 250, 
     borderRadius: 10,
+    backgroundColor: theme.colors.lightGrey, 
+    resizeMode: 'cover', 
   },
-  buttonSpacing: {
-    marginTop: 20,
+  button: {
+    borderRadius: 10,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPrimary: {
+    backgroundColor: theme.colors.primary,
+  },
+  buttonPrimaryText: {
+    color: theme.colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonSecondary: {
+    backgroundColor: 'transparent',
+    borderColor: theme.colors.primary,
+    borderWidth: 1
+  },
+  buttonSecondaryText: {
+    color: theme.colors.primary,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

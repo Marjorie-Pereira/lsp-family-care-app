@@ -1,8 +1,9 @@
+import Button from '@/components/Button';
+import { theme } from '@/constants/theme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from "react";
 
 import {
-  Button,
   ScrollView,
   StyleSheet,
   Text,
@@ -52,11 +53,15 @@ export default function EventForm() {
         value={name}
         onChangeText={setName}
         placeholder="Digite o nome"
+        placeholderTextColor={theme.colors.placeholder}
       />
 
-      <Button onPress={showDatepicker} title="Show date picker!" />
-      <Button onPress={showTimepicker} title="Show time picker!" />
-      <Text>selected: {date.toLocaleString()}</Text>
+      <Button onPress={showDatepicker} title="Show date picker!" buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
+      <Button onPress={showTimepicker} title="Show time picker!" buttonStyle={[styles.button, styles.buttonSecondary]} textStyle={styles.buttonSecondaryText} />
+      <Text style={styles.label}>Data e Hora Selecionadas:</Text>
+      <View style={styles.dateDisplay}>
+        <Text style={styles.dateDisplayText}>{date.toLocaleString()}</Text>
+      </View>
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
@@ -67,37 +72,78 @@ export default function EventForm() {
         />
       )}
 
-      <View style={styles.buttonSpacing}>
-        <Button title="Criar Evento" onPress={handleCreateEvent} />
-      </View>
+      <Button title="Criar Evento" onPress={handleCreateEvent} buttonStyle={[styles.button, styles.buttonPrimary]} textStyle={styles.buttonPrimaryText} />
     </ScrollView>
   );
 }
 
+
+
+
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#fff",
     flexGrow: 1,
+    padding: 24,
+    backgroundColor: theme.colors.white,
+    gap: 16, 
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: theme.colors.textPrimary,
+    marginBottom: 8,
   },
   label: {
     fontSize: 16,
-    marginTop: 15,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 5,
-  },
-  image: {
-    width: "100%",
-    height: 200,
-    marginTop: 15,
+    borderColor: theme.colors.border,
     borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    backgroundColor: theme.colors.lightGrey,
+    color: theme.colors.textPrimary,
   },
-  buttonSpacing: {
-    marginTop: 20,
+  
+  dateDisplay: {
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: theme.colors.lightGrey,
+    minHeight: 48, 
+    justifyContent: 'center', 
+  },
+  
+  dateDisplayText: {
+    fontSize: 16,
+    color: theme.colors.textPrimary, 
+  },
+  button: {
+    borderRadius: 10,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPrimary: {
+    backgroundColor: theme.colors.primary,
+  },
+  buttonPrimaryText: {
+    color: theme.colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonSecondary: {
+    backgroundColor: theme.colors.lightGrey,
+  },
+  buttonSecondaryText: {
+    color: theme.colors.primary,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
