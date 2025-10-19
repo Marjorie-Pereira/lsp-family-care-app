@@ -13,14 +13,12 @@ import {
   Text,
   View,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
@@ -139,8 +137,9 @@ export default function Index() {
         onLongPress={() => handleLongPress(item)}
         style={[
           {
-            marginHorizontal: 16,
+    
             marginBottom: 10,
+            width: '100%'
           },
           isSelected && styles.itemSelected,
         ]}
@@ -152,7 +151,11 @@ export default function Index() {
             </View>
           )}
           <ImageBackground
-            source={{ uri: item.imageUrl }}
+            source={
+              item.imageUrl 
+                ? { uri: item.imageUrl } 
+                : require("../../../../assets/img/placeholder_schedule.png")
+            }
             resizeMode="cover"
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}
@@ -193,32 +196,26 @@ export default function Index() {
             ) : undefined, // Some quando não está em seleção
         }}
       />
-      <ScrollView>
-        <SafeAreaView>
-          <View style={styles.mainContainer}>
-            <FlatList
-              data={schedules}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-              extraData={selectedItems}
-            />
+      <View style={styles.mainContainer}>
+          <FlatList
+            data={schedules}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedItems}
+          />
 
-            {/* Nova agenda button */}
-            <View style={styles.buttonContainer}>
-              <AnimatedPressable
-                onPress={() => router.push("/form")}
-                style={[styles.shadow, mainButtonStyles.button]}
-              >
-                <Animated.Text
-                  style={[plusIconStyle, mainButtonStyles.content]}
-                >
-                  +
-                </Animated.Text>
-              </AnimatedPressable>
-            </View>
+          {/* Nova agenda button */}
+          <View style={styles.buttonContainer}>
+            <AnimatedPressable
+              onPress={() => router.push("/form")}
+              style={[styles.shadow, mainButtonStyles.button]}
+            >
+              <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
+                +
+              </Animated.Text>
+            </AnimatedPressable>
           </View>
-        </SafeAreaView>
-      </ScrollView>
+        </View>
     </>
   );
 }
@@ -246,7 +243,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     display: "flex",
-    alignItems: "center",
+    paddingTop: 10
   },
   buttonContainer: {
     position: "absolute",
@@ -254,7 +251,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     right: 20,
-    bottom: 0,
+    bottom: 10,
   },
   shadow: {
     shadowColor: "#171717",

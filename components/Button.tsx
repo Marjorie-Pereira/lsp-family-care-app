@@ -8,9 +8,10 @@ const Button = ({
     onPress=()=>{},
     loading=false,
     hasShadow=true,
+    outline=false
 }) => {
     const shadowStyle = {
-        shadowColor: theme.colors.dark,
+        shadowColor: theme.colors.textPrimary,
         shadowOffset: {
             width: 0,
             height: 10,
@@ -50,5 +51,5 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         fontWeight: "600"
-    }
+    },
 }) 

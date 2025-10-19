@@ -51,15 +51,17 @@ export default function EventForm() {
 
         <Button
           onPress={showDatepicker}
-          title="Show date picker!"
+          title="Definir a data"
           buttonStyle={[styles.button, styles.buttonSecondary]}
           textStyle={styles.buttonSecondaryText}
+          hasShadow={false}
         />
         <Button
           onPress={showTimepicker}
-          title="Show time picker!"
+          title="Definir o horário"
           buttonStyle={[styles.button, styles.buttonSecondary]}
           textStyle={styles.buttonSecondaryText}
+          hasShadow={false}
         />
         <Text style={styles.label}>Data e Hora Selecionadas:</Text>
         <View style={styles.dateDisplay}>
@@ -132,9 +134,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    paddingVertical: 16,
-    alignItems: "center",
-    justifyContent: "center",
+    
   },
   buttonPrimary: {
     backgroundColor: theme.colors.primary,
@@ -145,7 +145,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonSecondary: {
-    backgroundColor: theme.colors.lightGrey,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary
   },
   buttonSecondaryText: {
     color: theme.colors.primary,

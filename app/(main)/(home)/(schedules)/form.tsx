@@ -123,6 +123,7 @@ export default function FormScreen() {
           onPress={pickImage}
           buttonStyle={[styles.button, styles.buttonSecondary]}
           textStyle={styles.buttonSecondaryText}
+          hasShadow={false}
         />
         {image && <Image source={{ uri: image }} style={styles.image} />}
 
@@ -131,6 +132,7 @@ export default function FormScreen() {
           onPress={handleShare}
           buttonStyle={[styles.button, styles.buttonSecondary]}
           textStyle={styles.buttonSecondaryText}
+          hasShadow={false}
         />
 
         <Button
@@ -181,9 +183,6 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    paddingVertical: 16,
-    alignItems: "center",
-    justifyContent: "center",
   },
   buttonPrimary: {
     backgroundColor: theme.colors.primary,
@@ -194,9 +193,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonSecondary: {
-    backgroundColor: "transparent",
-    borderColor: theme.colors.primary,
-    borderWidth: 1,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary
   },
   buttonSecondaryText: {
     color: theme.colors.primary,

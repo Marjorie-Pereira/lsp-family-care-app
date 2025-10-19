@@ -117,7 +117,7 @@ export default function ScheduleInfo() {
           />
 
           <Text style={styles.titulo}>
-            Eventos de {new Date(selected).toLocaleDateString("pt-BR")}
+            Eventos de {new Date(selected).toLocaleDateString("pt-BR", { timeZone: 'UTC' })}
           </Text>
 
           <FlatList
