@@ -3,5 +3,7 @@ export type familyMemberType = {
     name: string;
     age: string;
     phone: string;
-    relation_type: string;
+    relation_type: relationship;
 }
+
+type relationship = "Pai/Mãe" | "Cônjuge" | "Filho(a)" | "Outro"
