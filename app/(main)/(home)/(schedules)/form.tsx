@@ -1,8 +1,11 @@
 import Button from "@/components/Button";
 import { theme } from "@/constants/theme";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { familyMemberType } from "@/types/familyMember.type";
 import { Picker } from "@react-native-picker/picker";
+import { decode } from "base64-arraybuffer";
+import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -18,18 +21,19 @@ import {
 
 export default function FormScreen() {
   const titleRef = useRef("");
-  const [image, setImage] = useState("");
-   const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
+  const [image, setImage] = useState<ImagePicker.ImagePickerAsset>();
+  const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
   const [familyMemberId, setFamilyMemberId] = useState(familyMembers[0]?.id);
   const router = useRouter();
+  const { user } = useAuth();
 
- 
   const fetchFamilyMembers = async () => {
     const { data, error } = await supabase.from("FamilyMembers").select("*");
 
     if (error) console.error(error);
     else setFamilyMembers(data);
   };
+
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -44,7 +48,7 @@ export default function FormScreen() {
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
     }
   };
 
@@ -57,36 +61,65 @@ export default function FormScreen() {
       return;
     }
     try {
-      const scheduleOwner = familyMembers.find((m) => m.id === familyMemberId)?.name
+      const scheduleOwner = familyMembers.find(
+        (m) => m.id === familyMemberId
+      )?.name;
       await Share.share({
         message: `Nome: ${titleRef.current}\nTitular: ${scheduleOwner}`,
-        url: image,
+        url: image?.uri,
       });
     } catch (error: any) {
       alert("Erro ao compartilhar: " + error.message);
     }
   };
 
+  async function uploadImageToSupabase(imageUri: string, userId: string) {
+   
+    const base64 = await FileSystem.readAsStringAsync(imageUri, {
+      encoding: "base64",
+    });
+
+    const arrayBuffer = decode(base64);
+
+    const filePath = `${userId}/${Date.now()}.png`;
+
+    const { data, error } = await supabase.storage
+      .from("app_storage")
+      .upload(filePath, arrayBuffer, {
+        contentType: "image/png",
+        upsert: false,
+      });
+
+    if (error) {
+      console.error("Erro ao fazer upload:", error);
+      throw error;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("app_storage")
+      .getPublicUrl(filePath);
+
+    return publicUrlData.publicUrl;
+  }
+
   const handleCreate = async () => {
     let title = titleRef.current.trim();
-    
+    const imageUrl = await uploadImageToSupabase(image?.uri || "", user.id);
 
     const { data, error } = await supabase
       .from("Schedules")
-      .insert({ title, imageUrl: image, family_member_id: familyMemberId });
+      .insert({ title, imageUrl, family_member_id: familyMemberId });
 
     if (error) {
       Alert.alert("Erro ao criar uma agenda", error.message);
-      console.error(error)
+      console.error(error);
     } else {
       Alert.alert("Agenda criada!", "Novo agenda adicionado com sucesso");
-      console.log("data from form", data)
+      console.log("data from form", data);
       // @ts-ignore
       router.navigate("/(main)/(home)/(schedules)", data);
     }
   };
-
-  
 
   useEffect(() => {
     fetchFamilyMembers();
@@ -108,7 +141,6 @@ export default function FormScreen() {
         <Picker
           onValueChange={(itemValue: string) => {
             setFamilyMemberId(itemValue);
-            
           }}
         >
           {familyMembers.map((member, index) => {
@@ -125,7 +157,7 @@ export default function FormScreen() {
           textStyle={styles.buttonSecondaryText}
           hasShadow={false}
         />
-        {image && <Image source={{ uri: image }} style={styles.image} />}
+        {image && <Image source={{ uri: image.uri }} style={styles.image} />}
 
         <Button
           title="Compartilhar com..."
@@ -193,9 +225,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonSecondary: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderWidth: 1.5,
-    borderColor: theme.colors.primary
+    borderColor: theme.colors.primary,
   },
   buttonSecondaryText: {
     color: theme.colors.primary,
