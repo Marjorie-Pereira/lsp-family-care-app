@@ -56,10 +56,10 @@ export default function Index() {
         setInSelectionMode(false);
       }
     } else {
-      const scheduleJson = JSON.stringify(item);
+    
       router.push({
         pathname: "/scheduleInfo",
-        params: { scheduleJson },
+        params: {...item},
       });
     }
   };

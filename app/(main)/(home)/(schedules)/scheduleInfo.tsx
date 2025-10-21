@@ -1,6 +1,7 @@
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { theme } from "@/constants/theme";
-import { useRouter } from "expo-router";
+import { scheduleType } from "@/types/scheduleType.type";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import {
@@ -17,6 +18,7 @@ import Animated, {
 
 export default function ScheduleInfo() {
   const router = useRouter();
+  const scheduleInfo = {...useLocalSearchParams<scheduleType>()} 
 
   LocaleConfig.locales["pt"] = {
     monthNames: [
@@ -147,6 +149,12 @@ export default function ScheduleInfo() {
             index={1}
             buttonLetter={"Novo evento"}
             onPress={() => router.push("/eventForm")}
+          />
+          <FloatingActionButton
+            isExpanded={isExpanded}
+            index={2}
+            buttonLetter={"Editar agenda"}
+            onPress={() => router.push({pathname: "/editSchedule", params: {...scheduleInfo}})}
           />
         </View>
       </CalendarProvider>
