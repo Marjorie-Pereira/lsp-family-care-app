@@ -6,8 +6,9 @@ export default function Layout() {
             
             <Stack.Screen name="index"  />
             <Stack.Screen name="form" options={{title: "Nova agenda"}} />
+            <Stack.Screen name="editSchedule" options={{title: "Editar Agenda"}} />
             <Stack.Screen name="scheduleInfo" options={{title: "Agenda"}} />
-            <Stack.Screen name="eventForm" options={{title: "Novo Evento"}} />
+            <Stack.Screen name="eventForm/[id]" options={{title: "Novo Evento"}} />
         </Stack>
     )
     

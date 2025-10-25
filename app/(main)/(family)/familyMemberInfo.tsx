@@ -9,8 +9,8 @@ import { Alert, Image, Text, View } from "react-native";
 export default function FamilyMemberInfo() {
   const router = useRouter();
   const { id, name, age, phone, relation_type } =
-    useLocalSearchParams<familyMemberType>();
-  const memberInfo = { ...useLocalSearchParams<familyMemberType>() };
+    useLocalSearchParams();
+  const memberInfo = { ...useLocalSearchParams() };
 
   const deleteFamilyMember = async (id: string) => {
     const { data, error } = await supabase
