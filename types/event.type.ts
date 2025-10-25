@@ -1,10 +1,10 @@
 export type eventType = {
-    id: string;
+    id: number;
+    event_date: Date;
+    name: string;
+    type: eventCategory;
     schedule_id: string;
-    title: string;
-    date: Date;
-    category: eventCategory;
 
 }
 
-export type eventCategory = "Viagem" | "Medicação" | "Outro"
+export type eventCategory = "Viagem" | "Medicacao" | "Outro"

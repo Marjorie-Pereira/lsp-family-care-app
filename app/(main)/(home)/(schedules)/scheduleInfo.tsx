@@ -1,8 +1,10 @@
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { theme } from "@/constants/theme";
+import { supabase } from "@/lib/supabase";
+import { eventType } from "@/types/event.type";
 import { scheduleType } from "@/types/scheduleType.type";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import {
   CalendarProvider,
@@ -18,7 +20,7 @@ import Animated, {
 
 export default function ScheduleInfo() {
   const router = useRouter();
-  const scheduleInfo = {...useLocalSearchParams<scheduleType>()} 
+  const scheduleInfo = { ...useLocalSearchParams<scheduleType>() };
 
   LocaleConfig.locales["pt"] = {
     monthNames: [
@@ -65,13 +67,30 @@ export default function ScheduleInfo() {
 
   const hoje = new Date().toISOString().split("T")[0];
   const [selected, setSelected] = useState(hoje);
-  const eventos: any = {
-    "2025-10-06": [{ id: 1, title: "Consulta pediatra" }],
-    "2025-10-07": [{ id: 2, title: "Reunião com a escola" }],
-    "2025-10-09": [{ id: 3, title: "Vacina do bebê" }],
+  const [events, setEvents] = useState<eventType[]>([]);
+
+  const fetchEvents = async () => {
+    const { data, error } = await supabase
+      .from("Events")
+      .select("*")
+      .eq("schedule_id", scheduleInfo.id);
+
+    if (error) {
+      console.error(error);
+    } else {
+      setEvents(data);
+    }
   };
 
-  const eventosDoDia = eventos[selected] || [];
+  const selectedDayEvents = events.filter((ev) => {
+    return ev?.event_date.toString().split('T')[0] === selected;
+  }) || []
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEvents();
+    }, [])
+  );
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -119,15 +138,18 @@ export default function ScheduleInfo() {
           />
 
           <Text style={styles.titulo}>
-            Eventos de {new Date(selected).toLocaleDateString("pt-BR", { timeZone: 'UTC' })}
+            Eventos de{" "}
+            {new Date(selected).toLocaleDateString("pt-BR", {
+              timeZone: "UTC",
+            })}
           </Text>
 
           <FlatList
-            data={eventosDoDia}
+            data={selectedDayEvents}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.evento}>
-                <Text style={styles.eventoTexto}>{item.title}</Text>
+                <Text style={styles.eventoTexto}>{item.name}</Text>
               </View>
             )}
             ListEmptyComponent={
@@ -148,13 +170,18 @@ export default function ScheduleInfo() {
             isExpanded={isExpanded}
             index={1}
             buttonLetter={"Novo evento"}
-            onPress={() => router.push("/eventForm")}
+            onPress={() => router.push(`./eventForm/${scheduleInfo.id}`)}
           />
           <FloatingActionButton
             isExpanded={isExpanded}
             index={2}
             buttonLetter={"Editar agenda"}
-            onPress={() => router.push({pathname: "/editSchedule", params: {...scheduleInfo}})}
+            onPress={() =>
+              router.push({
+                pathname: "/editSchedule",
+                params: { ...scheduleInfo },
+              })
+            }
           />
         </View>
       </CalendarProvider>
