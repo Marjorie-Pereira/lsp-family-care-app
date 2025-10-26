@@ -9,6 +9,7 @@ export default function Layout() {
             <Stack.Screen name="editSchedule" options={{title: "Editar Agenda"}} />
             <Stack.Screen name="scheduleInfo" options={{title: "Agenda"}} />
             <Stack.Screen name="eventForm/[id]" options={{title: "Novo Evento"}} />
+            <Stack.Screen name="event/[id]" options={{title: "Informações do Evento"}} />
         </Stack>
     )
     

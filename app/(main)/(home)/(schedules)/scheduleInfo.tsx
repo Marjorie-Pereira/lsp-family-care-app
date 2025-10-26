@@ -82,9 +82,10 @@ export default function ScheduleInfo() {
     }
   };
 
-  const selectedDayEvents = events.filter((ev) => {
-    return ev?.event_date.toString().split('T')[0] === selected;
-  }) || []
+  const selectedDayEvents =
+    events.filter((ev) => {
+      return ev?.event_date.toString().split("T")[0] === selected;
+    }) || [];
 
   useFocusEffect(
     useCallback(() => {
@@ -148,9 +149,11 @@ export default function ScheduleInfo() {
             data={selectedDayEvents}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View style={styles.evento}>
-                <Text style={styles.eventoTexto}>{item.name}</Text>
-              </View>
+              <Pressable onPress={() => router.push( `./event/${item.id}`)}>
+                <View style={styles.evento}>
+                  <Text style={styles.eventoTexto}>{item.name}</Text>
+                </View>
+              </Pressable>
             )}
             ListEmptyComponent={
               <Text style={styles.semEventos}>Nenhum evento neste dia</Text>

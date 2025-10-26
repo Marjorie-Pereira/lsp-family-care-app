@@ -7,6 +7,7 @@ export const theme = {
     textPrimary: "#1C1C1E",
     textSecondary: "#3C3C43",
     placeholder: "#999",
+    dangerBtn: '#e95850ff'
   },
   fonts: {
     medium: "500",
