@@ -28,9 +28,8 @@ const Event = () => {
 
   const formatarData = (dateTime: Date | undefined) => {
     if (!dateTime) return "Data não definida";
-    const dateString = dateTime.toLocaleString().split("T")[0];
-
-    return new Date(dateString).toLocaleString("pt-BR", {
+    
+    return dateTime.toLocaleString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -47,8 +46,7 @@ const Event = () => {
           <Text style={styles.info}>{event?.name}</Text>
 
           <Text style={styles.label}>Data e Hora:</Text>
-          <Text style={styles.info}>{formatarData(event?.event_date)}</Text>
-
+          <Text style={styles.info}>{formatarData(new Date(event?.event_date || ''))}</Text>
           <Text style={styles.label}>Tipo:</Text>
           <Text style={styles.info}>{event?.type}</Text>
         </View>
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
   },
   botao: {
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 50,
     alignItems: "center",
     marginBottom: 10,
   },

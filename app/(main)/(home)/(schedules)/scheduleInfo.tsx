@@ -148,13 +148,17 @@ export default function ScheduleInfo() {
           <FlatList
             data={selectedDayEvents}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Pressable onPress={() => router.push( `./event/${item.id}`)}>
-                <View style={styles.evento}>
-                  <Text style={styles.eventoTexto}>{item.name}</Text>
-                </View>
-              </Pressable>
-            )}
+            renderItem={({ item }) => {
+              const eventTime = new Date(item.event_date).toLocaleString('pt-br', {hour: '2-digit', minute: '2-digit'});
+              return (
+                <Pressable onPress={() => router.push(`./event/${item.id}`)}>
+                  <View style={styles.evento}>
+                    <Text style={styles.eventoTexto}>{item.name}</Text>
+                    <Text style={styles.eventoTexto}>{eventTime}</Text>
+                  </View>
+                </Pressable>
+              );
+            }}
             ListEmptyComponent={
               <Text style={styles.semEventos}>Nenhum evento neste dia</Text>
             }
@@ -210,6 +214,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     elevation: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   eventoTexto: {
     fontSize: 16,
