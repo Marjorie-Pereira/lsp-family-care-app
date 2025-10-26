@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { eventType } from "@/types/event.type";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Event = () => {
@@ -28,7 +28,7 @@ const Event = () => {
 
   const formatarData = (dateTime: Date | undefined) => {
     if (!dateTime) return "Data não definida";
-    
+
     return dateTime.toLocaleString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
@@ -36,6 +36,28 @@ const Event = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleDelete = async () => {
+    Alert.alert("Confirmar Exclusão", `Você tem certeza?`, [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Deletar",
+        style: "destructive",
+        onPress: async () => {
+          const { data, error } = await supabase
+            .from("Events")
+            .delete()
+            .match({ id });
+          if (error) console.error(error);
+          else {
+            Alert.alert("Evento deletado com sucesso!");
+            // @ts-ignore
+            router.back();
+          }
+        },
+      },
+    ]);
   };
 
   return (
@@ -46,7 +68,9 @@ const Event = () => {
           <Text style={styles.info}>{event?.name}</Text>
 
           <Text style={styles.label}>Data e Hora:</Text>
-          <Text style={styles.info}>{formatarData(new Date(event?.event_date || ''))}</Text>
+          <Text style={styles.info}>
+            {formatarData(new Date(event?.event_date || ""))}
+          </Text>
           <Text style={styles.label}>Tipo:</Text>
           <Text style={styles.info}>{event?.type}</Text>
         </View>
@@ -56,7 +80,10 @@ const Event = () => {
             <Text style={styles.botaoTexto}>Editar Evento</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.botao, styles.botaoExcluir]}>
+          <TouchableOpacity
+            style={[styles.botao, styles.botaoExcluir]}
+            onPress={handleDelete}
+          >
             <Text style={styles.botaoTexto}>Excluir Evento</Text>
           </TouchableOpacity>
         </View>
