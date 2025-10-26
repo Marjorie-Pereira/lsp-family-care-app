@@ -4,8 +4,8 @@ import { supabase } from "@/lib/supabase";
 import { familyMemberType } from "@/types/familyMember.type";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Pressable, ScrollView } from "react-native-gesture-handler";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Family() {
   const [familyMembers, setFamilyMembers] = useState<familyMemberType[]>([]);
@@ -19,7 +19,7 @@ export default function Family() {
   const router = useRouter();
   useEffect(() => {
     fetchFamilyMembers();
-  }, familyMembers);
+  }, [familyMembers]);
 
   return (
     <>
@@ -31,12 +31,13 @@ export default function Family() {
             {familyMembers.map((member, index) => {
               return (
                 <Pressable
-                  key={index}
+                  key={member.id}
                   onPress={() =>
                     router.push({
                       pathname: "/familyMemberInfo",
                       params: { ...member },
                     })
+                   
                   }
                 >
                   <View style={styles.listItem}>

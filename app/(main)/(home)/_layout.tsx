@@ -44,16 +44,7 @@ export default function Layout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="mindfulness"
-        options={{
-          title: "Autocuidado",
-          tabBarLabel: "Autocuidado",
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="medical-outline" size={size} color={color} />
-          ),
-        }}
-      />
+      
     </Tabs>
   );
 }
