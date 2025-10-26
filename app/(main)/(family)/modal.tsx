@@ -22,14 +22,12 @@ export default function Modal() {
         ? relationRef.current.trim()
         : selectedRelation;
 
-    const { data, error } = await supabase
-      .from("FamilyMembers")
-      .insert({
-        name: memberName,
-        age: memberAge,
-        phone: memberPhone,
-        relation_type: memberRelation,
-      });
+    const { data, error } = await supabase.from("FamilyMembers").insert({
+      name: memberName,
+      age: memberAge,
+      phone: memberPhone,
+      relation_type: memberRelation,
+    });
 
     if (error) {
       Alert.alert("Erro ao adicionar membro", error.message);
@@ -43,7 +41,6 @@ export default function Modal() {
   const handleUpdateFamilyMember = async () => {
     let relation_type =
       selectedRelation === "Outro" ? relation : selectedRelation;
-    console.log(memberInfo.id);
     const { error } = await supabase
       .from("FamilyMembers")
       .update({ name, age, phone, relation_type })

@@ -1,30 +1,33 @@
 import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
 import { eventType } from "@/types/event.type";
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Event = () => {
   const { id } = useLocalSearchParams();
   const [event, setEvent] = useState<eventType>();
-  useEffect(() => {
-    async function getEvent() {
-      const { data, error } = await supabase
-        .from("Events")
-        .select("*")
-        .eq("id", id);
-      if (error) {
-        console.error(error);
-        router.back();
-      } else {
-        setEvent(data[0]);
-      }
-    }
 
-    getEvent();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      async function getEvent() {
+        const { data, error } = await supabase
+          .from("Events")
+          .select("*")
+          .eq("id", id);
+        if (error) {
+          console.error(error);
+          router.back();
+        } else {
+          setEvent(data[0]);
+        }
+      }
+
+      getEvent();
+    }, [])
+  );
 
   const formatarData = (dateTime: Date | undefined) => {
     if (!dateTime) return "Data não definida";
@@ -60,6 +63,11 @@ const Event = () => {
     ]);
   };
 
+  const handleEdit = async () => {
+    const eventParams = JSON.stringify(event);
+    router.push({ pathname: "/eventForm/editEvent", params: { eventParams } });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -76,7 +84,10 @@ const Event = () => {
         </View>
 
         <View style={styles.botoesContainer}>
-          <TouchableOpacity style={[styles.botao, styles.botaoEditar]}>
+          <TouchableOpacity
+            style={[styles.botao, styles.botaoEditar]}
+            onPress={handleEdit}
+          >
             <Text style={styles.botaoTexto}>Editar Evento</Text>
           </TouchableOpacity>
 

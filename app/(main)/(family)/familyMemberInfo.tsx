@@ -1,15 +1,12 @@
 import Button from "@/components/Button";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { supabase } from "@/lib/supabase";
-import { familyMemberType } from "@/types/familyMember.type";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
 import { Alert, Image, Text, View } from "react-native";
 
 export default function FamilyMemberInfo() {
   const router = useRouter();
-  const { id, name, age, phone, relation_type } =
-    useLocalSearchParams();
+  const { id, name, age, phone, relation_type } = useLocalSearchParams();
   const memberInfo = { ...useLocalSearchParams() };
 
   const deleteFamilyMember = async (id: string) => {
@@ -24,10 +21,6 @@ export default function FamilyMemberInfo() {
       router.navigate("family", data);
     }
   };
-
-  useEffect(() => {
-    console.log(name);
-  }, [name]);
 
   return (
     <>
