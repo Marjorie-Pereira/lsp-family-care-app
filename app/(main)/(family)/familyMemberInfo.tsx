@@ -18,7 +18,7 @@ export default function FamilyMemberInfo() {
     else {
       Alert.alert("Familiar deletado com sucesso!");
       // @ts-ignore
-      router.navigate("family", data);
+      router.navigate("/(main)/(family)", data);
     }
   };
 

@@ -34,7 +34,7 @@ export default function Modal() {
     } else {
       Alert.alert("Novo Membro", "Novo familiar adicionado com sucesso");
       // @ts-ignore
-      router.navigate("./index", data);
+      router.navigate("/(main)/(family)", data);
     }
   };
 
@@ -48,7 +48,7 @@ export default function Modal() {
 
     if (error) console.error(error);
     else Alert.alert("Editar Familiar", "Familiar Editado com Sucesso!");
-    router.navigate("./index");
+    router.navigate("/(main)/(family)");
   };
 
   const nameRef = useRef("");
