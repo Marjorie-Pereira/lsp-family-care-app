@@ -36,14 +36,7 @@ export default function Layout() {
                 title: 'Configurações'
             }}
             />
-            <Drawer.Screen
-            name='family'
-            options={{
-                drawerStyle: {
-                    display: 'none'
-                }
-            }}
-            />
+            
             
             
         </Drawer>

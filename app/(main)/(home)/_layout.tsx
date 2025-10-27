@@ -35,16 +35,15 @@ export default function Layout() {
       />
 
       <Tabs.Screen
-        name="trackerDevice"
+        name="travels"
         options={{
-          title: "Viagens Programadas",
+          headerShown: false,
           tabBarLabel: "Viagens",
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="map-outline" size={size} color={color} />
           ),
         }}
-      />
-      
+      /> 
     </Tabs>
   );
 }

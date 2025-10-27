@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const TravelCard = ({ viagem }: any) => {
@@ -22,7 +23,7 @@ const TravelCard = ({ viagem }: any) => {
   };
 
   return (
-    <TouchableOpacity style={styles.cardViagem}>
+    <TouchableOpacity style={styles.cardViagem} onPress={() => router.push('/travels/travelDetails')}>
       {/* Informações da Viagem */}
       <View style={styles.cardInfo}>
         <Text style={styles.cardDestino}>{viagem.destino}</Text>
