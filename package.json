@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
+    "@mapbox/polyline": "^1.2.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "^8.4.5",
@@ -56,6 +57,7 @@
     "react-navigation": "^5.0.0"
   },
   "devDependencies": {
+    "@types/mapbox__polyline": "^1.0.5",
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",

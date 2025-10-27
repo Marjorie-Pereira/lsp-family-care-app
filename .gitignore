@@ -44,5 +44,5 @@ app-example
 /android
 
 # supabase
-/constants/index.js
+/constants/*
 
