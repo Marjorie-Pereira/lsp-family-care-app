@@ -17,19 +17,19 @@ const RASTREADOR_INFO = {
 const VIAGENS_PROGRAMADAS = [
   {
     id: 'v1',
-    destino: 'São Paulo, SP',
+    destino: 'Levar na creche',
     data: new Date('2025-10-28T08:00:00'),
     status: 'Programada',
   },
   {
     id: 'v2',
-    destino: 'Rio de Janeiro, RJ',
+    destino: 'Levar no Pediatra',
     data: new Date('2025-11-05T10:30:00'),
     status: 'Programada',
   },
   {
     id: 'v3',
-    destino: 'Visita ao Cliente (Campinas)',
+    destino: 'Vacina',
     data: new Date('2025-10-24T18:00:00'),
     status: 'Concluída',
   },

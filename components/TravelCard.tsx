@@ -1,3 +1,4 @@
+import { theme } from "@/constants/theme";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -78,10 +79,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   statusProgramada: {
-    backgroundColor: '#007AFF', // Azul
+    backgroundColor: theme.colors.primary, // Azul
   },
   statusConcluida: {
-    backgroundColor: '#34C759', // Verde
+    backgroundColor: '#5eba75ff', // Verde
   },
   statusOutro: {
     backgroundColor: '#8E8E93', // Cinza
