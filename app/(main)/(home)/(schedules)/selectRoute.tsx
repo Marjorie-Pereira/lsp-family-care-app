@@ -10,7 +10,6 @@ import MapView, {
 
 export default function SelectRouteScreen() {
   const { id, name, date, eventType } = useLocalSearchParams();
-  console.log("date from maps", date)
   const [origin, setOrigin] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
 

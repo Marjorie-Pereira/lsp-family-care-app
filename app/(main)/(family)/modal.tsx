@@ -13,7 +13,6 @@ export default function Modal() {
   const { modalLabel, buttonTitle, ...memberInfo } = useLocalSearchParams();
 
   const handleAddFamilyMember = async () => {
-    console.log("Family Member Added!");
     let memberName = nameRef.current.trim();
     let memberAge = ageRef.current.trim();
     let memberPhone = phoneRef.current.trim();

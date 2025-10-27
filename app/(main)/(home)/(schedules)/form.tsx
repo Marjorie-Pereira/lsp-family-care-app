@@ -115,7 +115,6 @@ export default function FormScreen() {
       console.error(error);
     } else {
       Alert.alert("Agenda criada!", "Novo agenda adicionado com sucesso");
-      console.log("data from form", data);
       // @ts-ignore
       router.navigate("/(main)/(home)/(schedules)", data);
     }

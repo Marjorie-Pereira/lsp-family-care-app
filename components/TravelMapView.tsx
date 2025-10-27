@@ -6,7 +6,6 @@ import { googleApiKey } from '@/constants/apikey';
 import polyline from '@mapbox/polyline';
 
 const TravelMapView = ({ info }: any) => {
-    console.log(googleApiKey)
   // Estado para armazenar as coordenadas da rota
   const [rota, setRota] = useState<any[]>([]);
   // Referência para o componente MapView

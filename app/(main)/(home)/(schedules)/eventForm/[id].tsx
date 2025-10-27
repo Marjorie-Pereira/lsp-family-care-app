@@ -26,11 +26,7 @@ export default function EventForm() {
   const [destination, setDestination] = useState<any>(null);
   const [isTravel, setIsTravel] = useState(true);
 
-  console.log(params.date);
-  console.log(
-    "date constructor",
-    
-  );
+ 
   const { id } = useLocalSearchParams();
   
 
