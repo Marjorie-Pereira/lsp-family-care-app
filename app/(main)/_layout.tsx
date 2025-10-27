@@ -1,13 +1,11 @@
-import CustomDrawerContent from '@/components/CustomDrawerContent';
 import { Drawer } from 'expo-router/drawer';
-import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function Layout() {
   return (
     <GestureHandlerRootView style={{flex:1}}>
         <Drawer 
-        drawerContent={CustomDrawerContent}>
+        >
             <Drawer.Screen
             name='(home)'
             options={{
@@ -24,6 +22,7 @@ export default function Layout() {
             }}
             />
             <Drawer.Screen
+            // consertar header duplo
             name='(family)'
             options={{
                 drawerLabel:"Família",
@@ -35,6 +34,14 @@ export default function Layout() {
             options={{
                 drawerLabel:"Configurações",
                 title: 'Configurações'
+            }}
+            />
+            <Drawer.Screen
+            name='family'
+            options={{
+                drawerStyle: {
+                    display: 'none'
+                }
             }}
             />
             

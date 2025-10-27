@@ -41,9 +41,9 @@ const TravelTab = () => {
       <FlatList
         data={VIAGENS_PROGRAMADAS}
         keyExtractor={(item) => item.id}
-        // O HeaderRastreador é o componente que mostra o mapa e status
+        
         ListHeaderComponent={<TrackerInfoHeader info={RASTREADOR_INFO} />}
-        // renderItem chama o ViagemCard para cada item
+        
         renderItem={({ item }) => <TravelCard viagem={item} />}
         ListEmptyComponent={
           <Text style={styles.listaVazia}>Nenhuma viagem programada.</Text>

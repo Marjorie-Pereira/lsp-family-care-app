@@ -1,8 +1,8 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
-const TrackerInfoHeader = ({info}: any) => {
- 
+const TrackerInfoHeader = ({ info }: any) => {
   const getStatusStyle = () => {
     return info.status === "Online"
       ? [styles.statusTexto, styles.statusOnline]
@@ -13,30 +13,30 @@ const TrackerInfoHeader = ({info}: any) => {
     <View style={styles.headerContainer}>
       <Text style={styles.tituloSecao}>Meu Rastreador</Text>
 
-      {/* --- Placeholder do Mapa ---
-          Aqui você usaria o componente <MapView /> da biblioteca 'react-native-maps'
-          Mostrando um placeholder por enquanto.
-      */}
-      <View style={styles.mapaPlaceholder}>
-        {/*
+      
+
+      <View style={styles.mapaContainer}>
         <MapView
           style={styles.mapa}
+          
           initialRegion={{
-            ...info.ultimaLocalizacao,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
+            latitude: info.ultimaLocalizacao.latitude,
+            longitude: info.ultimaLocalizacao.longitude,
+            latitudeDelta: 0.01, 
+            longitudeDelta: 0.01, 
           }}
+        //   scrollEnabled={false}
+          // zoomEnabled={false}
         >
-          <Marker coordinate={info.ultimaLocalizacao} title={info.nome} />
+          
+          <Marker
+            coordinate={info.ultimaLocalizacao}
+            title={info.nome}
+            description={`Bateria: ${info.bateria}%`}
+          />
         </MapView>
-        */}
-        <Text style={styles.mapaTexto}>
-          (Aqui entraria o Mapa com a localização)
-        </Text>
       </View>
-      {/* --- Fim do Placeholder --- */}
 
-      {/* Card de Status do Dispositivo */}
       <View style={styles.statusCard}>
         <View style={styles.statusLinha}>
           <MaterialCommunityIcons name="car-connected" size={22} color="#333" />
@@ -56,7 +56,6 @@ const TrackerInfoHeader = ({info}: any) => {
         </View>
       </View>
 
-      {/* Título da próxima seção */}
       <Text style={[styles.tituloSecao, { marginTop: 20 }]}>
         Viagens Programadas
       </Text>
@@ -74,18 +73,16 @@ const styles = StyleSheet.create({
     color: "#111",
     marginVertical: 15,
   },
-  mapaPlaceholder: {
+  mapaContainer: {
     height: 200,
-    backgroundColor: "#e0e0e0",
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    overflow: "hidden", 
+    backgroundColor: "#e0e0e0",
   },
-  // Estilo para o mapa real (descomente ao usar)
-  // mapa: {
-  //   ...StyleSheet.absoluteFillObject,
-  //   borderRadius: 12,
-  // },
+  mapa: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
   mapaTexto: {
     color: "#666",
     fontSize: 16,
@@ -95,8 +92,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginTop: 15,
-    elevation: 3, // Sombra Android
-    shadowColor: "#000", // Sombra iOS
+    elevation: 3, 
+    shadowColor: "#000", 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -118,11 +115,11 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   statusOnline: {
-    color: "#28a745", // Verde
+    color: "#28a745", 
     fontWeight: "bold",
   },
   statusOffline: {
-    color: "#dc3545", // Vermelho
+    color: "#dc3545", 
     fontWeight: "bold",
   },
 });
