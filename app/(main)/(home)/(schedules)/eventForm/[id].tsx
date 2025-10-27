@@ -4,38 +4,54 @@ import { supabase } from "@/lib/supabase";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 
 export default function EventForm() {
-  const [name, setName] = useState("");
+  const params = useLocalSearchParams();
+  const [name, setName] = useState((params.name as string) ?? "");
   const [eventType, setEventType] = useState("Viagem");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(params.date ? new Date(params.date as string) : new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [origin, setOrigin] = useState<any>(null);
+  const [destination, setDestination] = useState<any>(null);
+  const [isTravel, setIsTravel] = useState(true);
+
+  console.log(params.date);
+  console.log(
+    "date constructor",
+    
+  );
   const { id } = useLocalSearchParams();
+  
 
   const handleCreateEvent = async () => {
-    if(name === "") {
-        Alert.alert("Por favor, insira um nome para o evento")
-        return
+    if (name === "") {
+      Alert.alert("Por favor, insira um nome para o evento");
+      return;
     }
     const { data, error } = await supabase
-          .from("Events")
-          .insert({ name, type: eventType, event_date: date, schedule_id: id })
-         
-        if (error) {
-          Alert.alert("Erro ao criar evento", error.message);
-          console.error(error);
-        } else {
-          Alert.alert("Evento criado com sucesso!");
-          // @ts-ignore
-          router.back();
-        }
-  };
+      .from("Events")
+      .insert({ name, type: eventType, event_date: date, schedule_id: id });
 
-  
+    if (error) {
+      Alert.alert("Erro ao criar evento", error.message);
+      console.error(error);
+    } else {
+      Alert.alert("Evento criado com sucesso!");
+      // @ts-ignore
+      router.back();
+    }
+  };
 
   const onChange = (_event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -55,6 +71,13 @@ export default function EventForm() {
   const showTimepicker = () => {
     showMode("time");
   };
+
+  useEffect(() => {
+    if (params.origin && params.destination) {
+      setOrigin(JSON.parse(params.origin as string));
+      setDestination(JSON.parse(params.destination as string));
+    }
+  }, []);
 
   return (
     <>
@@ -84,7 +107,9 @@ export default function EventForm() {
         />
         <Text style={styles.label}>Data e Hora Selecionadas:</Text>
         <View style={styles.dateDisplay}>
-          <Text style={styles.dateDisplayText}>{date.toLocaleString()}</Text>
+          <Text style={styles.dateDisplayText}>
+            {date.toLocaleString()}
+          </Text>
         </View>
         {show && (
           <DateTimePicker
@@ -98,15 +123,54 @@ export default function EventForm() {
 
         <Picker
           onValueChange={(itemValue: string) => {
+            if (itemValue != "Viagem") {
+              setIsTravel(false);
+            } else setIsTravel(true);
+
             setEventType(itemValue);
           }}
           style={styles.picker}
-
+          selectedValue={(params.eventType as string) ?? ""}
         >
           <Picker.Item label={"Viagem"} value={"Viagem"} />
           <Picker.Item label={"Medicação"} value={"Medicacao"} />
           <Picker.Item label={"Outro"} value={"Outro"} />
         </Picker>
+
+        <Button
+          onPress={() =>
+            router.replace({
+              pathname: "../selectRoute",
+              params: {
+                id,
+                name,
+                date: date.toString(),
+                eventType,
+              },
+            })
+          }
+          title="Definir Trajeto"
+          buttonStyle={
+            isTravel
+              ? [styles.button, styles.buttonSecondary]
+              : { display: "none" }
+          }
+          textStyle={styles.buttonSecondaryText}
+          hasShadow={false}
+        />
+
+        {origin && destination && (
+          <View style={{ marginTop: 20 }}>
+            <Text>
+              Origem: {origin.latitude.toFixed(5)},{" "}
+              {origin.longitude.toFixed(5)}
+            </Text>
+            <Text>
+              Destino: {destination.latitude.toFixed(5)},{" "}
+              {destination.longitude.toFixed(5)}
+            </Text>
+          </View>
+        )}
 
         <Button
           title="Criar Evento"
