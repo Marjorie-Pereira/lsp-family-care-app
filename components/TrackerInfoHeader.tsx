@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapBoxView from "./Map";
 
 const TrackerInfoHeader = ({ info }: any) => {
   const getStatusStyle = () => {
@@ -13,10 +13,8 @@ const TrackerInfoHeader = ({ info }: any) => {
     <View style={styles.headerContainer}>
       <Text style={styles.tituloSecao}>Meu Rastreador</Text>
 
-      
-
       <View style={styles.mapaContainer}>
-        <MapView
+        {/* <MapView
           style={styles.mapa}
           
           initialRegion={{
@@ -34,7 +32,8 @@ const TrackerInfoHeader = ({ info }: any) => {
             title={info.nome}
             description={`Bateria: ${info.bateria}%`}
           />
-        </MapView>
+        </MapView> */}
+        <MapBoxView />
       </View>
 
       <View style={styles.statusCard}>
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
   mapaContainer: {
     height: 200,
     borderRadius: 12,
-    overflow: "hidden", 
+    overflow: "hidden",
     backgroundColor: "#e0e0e0",
   },
   mapa: {
@@ -92,8 +91,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginTop: 15,
-    elevation: 3, 
-    shadowColor: "#000", 
+    elevation: 3,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -115,11 +114,11 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   statusOnline: {
-    color: "#28a745", 
+    color: "#28a745",
     fontWeight: "bold",
   },
   statusOffline: {
-    color: "#dc3545", 
+    color: "#dc3545",
     fontWeight: "bold",
   },
 });

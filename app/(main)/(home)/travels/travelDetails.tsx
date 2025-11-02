@@ -1,8 +1,9 @@
-import TravelMapView from '@/components/TravelMapView';
+import TravelMapView from "@/components/TravelMapView";
+
 const RASTREADOR_INFO = {
-  id: 'rastreador-01',
-  nome: 'Meu Carro',
-  status: 'Online', // Pode ser 'Online', 'Offline', 'Economia'
+  id: "rastreador-01",
+  nome: "Meu Carro",
+  status: "Online", // Pode ser 'Online', 'Offline', 'Economia'
   bateria: 85,
   ultimaLocalizacao: {
     latitude: -23.55052,
@@ -10,9 +11,7 @@ const RASTREADOR_INFO = {
   },
 };
 const TravelDetails = () => {
-  return (
-    <TravelMapView info={RASTREADOR_INFO} />
-  )
-}
+  return <TravelMapView info={RASTREADOR_INFO} />;
+};
 
-export default TravelDetails
+export default TravelDetails;
