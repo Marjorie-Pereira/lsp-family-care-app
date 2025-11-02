@@ -7,7 +7,7 @@ import Mapbox, {
   ShapeSource,
 } from "@rnmapbox/maps";
 import { useEffect, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 Mapbox.setAccessToken(mapboxPublicToken);
 
@@ -17,6 +17,9 @@ export default function MapRoute() {
   const [route, setRoute] = useState(null);
   const [startInput, setStartInput] = useState("");
   const [endInput, setEndInput] = useState("");
+  const [startSuggestions, setStartSuggestions] = useState<any[]>([]);
+  const [endSuggestions, setEndSuggestions] = useState<any[]>([]);
+  const [isSelectingStart, setIsSelectingStart] = useState(false);
 
   async function getCoordinates(query: string) {
     if (!query) return null;
@@ -30,6 +33,17 @@ export default function MapRoute() {
       return data.features[0].geometry.coordinates;
     }
     return null;
+  }
+
+  async function getSuggestions(query: string) {
+    if (!query) return [];
+    const resp = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        query
+      )}.json?autocomplete=true&language=pt-BR&limit=5&access_token=${mapboxPublicToken}`
+    );
+    const data = await resp.json();
+    return data.features || [];
   }
 
   async function fetchRoute(startCoords: any[], endCoords: any[]) {
@@ -70,16 +84,54 @@ export default function MapRoute() {
           placeholder="Ponto de partida"
           style={styles.input}
           value={startInput}
-          onChangeText={setStartInput}
-          onSubmitEditing={handleSearchStart}
+          onFocus={() => setIsSelectingStart(true)}
+          onChangeText={async (text) => {
+            setStartInput(text);
+            const results = await getSuggestions(text);
+            setStartSuggestions(results);
+          }}
         />
+
         <TextInput
           placeholder="Destino"
           style={styles.input}
           value={endInput}
-          onChangeText={setEndInput}
-          onSubmitEditing={handleSearchEnd}
+          onFocus={() => setIsSelectingStart(false)}
+          onChangeText={async (text) => {
+            setEndInput(text);
+            const results = await getSuggestions(text);
+            setEndSuggestions(results);
+          }}
         />
+
+        {(isSelectingStart ? startSuggestions : endSuggestions).length > 0 && (
+          <View style={styles.suggestionsContainer}>
+            {(isSelectingStart ? startSuggestions : endSuggestions).map(
+              (item) => (
+                <View
+                  key={item.id}
+                  style={styles.suggestionItem}
+                  onTouchEnd={() => {
+                    const coords = item.geometry.coordinates;
+                    if (isSelectingStart) {
+                      setStartInput(item.place_name);
+                      setStart(coords);
+                      setStartSuggestions([]);
+                    } else {
+                      setEndInput(item.place_name);
+                      setEnd(coords);
+                      setEndSuggestions([]);
+                    }
+                  }}
+                >
+                  <View>
+                    <Text style={styles.suggestionText}>{item.place_name}</Text>
+                  </View>
+                </View>
+              )
+            )}
+          </View>
+        )}
       </View>
 
       <MapView style={styles.map}>
@@ -161,5 +213,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "white",
     borderWidth: 2,
+  },
+  suggestionsContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    marginTop: 4,
+    maxHeight: 150,
+    overflow: "scroll",
+    elevation: 3,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  suggestionText: {
+    color: "#333",
+    fontSize: 14,
   },
 });
