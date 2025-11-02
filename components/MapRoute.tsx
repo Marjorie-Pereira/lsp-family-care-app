@@ -8,10 +8,15 @@ import Mapbox, {
 } from "@rnmapbox/maps";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import Button from "./Button";
 
 Mapbox.setAccessToken(mapboxPublicToken);
 
-export default function MapRoute() {
+export default function MapRoute({
+  onConfirmRoute,
+}: {
+  onConfirmRoute: (start: any[] | null, end: any[] | null) => void;
+}) {
   const [start, setStart] = useState<any[] | null>(null); // [lng, lat]
   const [end, setEnd] = useState<any[] | null>(null);
   const [route, setRoute] = useState(null);
@@ -173,6 +178,16 @@ export default function MapRoute() {
           </ShapeSource>
         )}
       </MapView>
+      <Button
+        title="Salvar trajeto"
+        buttonStyle={{
+          position: "absolute",
+          bottom: 25,
+          left: 23,
+          width: "90%",
+        }}
+        onPress={() => onConfirmRoute(start, end)}
+      />
     </View>
   );
 }

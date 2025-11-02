@@ -56,10 +56,9 @@ export default function Index() {
         setInSelectionMode(false);
       }
     } else {
-    
       router.push({
         pathname: "/scheduleInfo",
-        params: {...item},
+        params: { ...item },
       });
     }
   };
@@ -137,9 +136,8 @@ export default function Index() {
         onLongPress={() => handleLongPress(item)}
         style={[
           {
-    
             marginBottom: 10,
-            width: '100%'
+            width: "100%",
           },
           isSelected && styles.itemSelected,
         ]}
@@ -152,8 +150,8 @@ export default function Index() {
           )}
           <ImageBackground
             source={
-              item.imageUrl 
-                ? { uri: item.imageUrl } 
+              item.imageUrl
+                ? { uri: item.imageUrl }
                 : require("../../../../assets/img/placeholder_schedule.png")
             }
             resizeMode="cover"
@@ -197,25 +195,25 @@ export default function Index() {
         }}
       />
       <View style={styles.mainContainer}>
-          <FlatList
-            data={schedules}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            extraData={selectedItems}
-          />
+        <FlatList
+          data={schedules}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedItems}
+        />
 
-          {/* Nova agenda button */}
-          <View style={styles.buttonContainer}>
-            <AnimatedPressable
-              onPress={() => router.push("/form")}
-              style={[styles.shadow, mainButtonStyles.button]}
-            >
-              <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
-                +
-              </Animated.Text>
-            </AnimatedPressable>
-          </View>
+        {/* Nova agenda button */}
+        <View style={styles.buttonContainer}>
+          <AnimatedPressable
+            onPress={() => router.push("/form")}
+            style={[styles.shadow, mainButtonStyles.button]}
+          >
+            <Animated.Text style={[plusIconStyle, mainButtonStyles.content]}>
+              +
+            </Animated.Text>
+          </AnimatedPressable>
         </View>
+      </View>
     </>
   );
 }
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     display: "flex",
-    paddingTop: 10
+    paddingTop: 10,
   },
   buttonContainer: {
     position: "absolute",

@@ -7,28 +7,28 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export default function EventForm() {
   const params = useLocalSearchParams();
   const [name, setName] = useState((params.name as string) ?? "");
   const [eventType, setEventType] = useState("Viagem");
-  const [date, setDate] = useState(params.date ? new Date(params.date as string) : new Date());
+  const [date, setDate] = useState(
+    params.date ? new Date(params.date as string) : new Date()
+  );
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [origin, setOrigin] = useState<any>(null);
   const [destination, setDestination] = useState<any>(null);
   const [isTravel, setIsTravel] = useState(true);
 
- 
   const { id } = useLocalSearchParams();
-  
 
   const handleCreateEvent = async () => {
     if (name === "") {
@@ -103,9 +103,7 @@ export default function EventForm() {
         />
         <Text style={styles.label}>Data e Hora Selecionadas:</Text>
         <View style={styles.dateDisplay}>
-          <Text style={styles.dateDisplayText}>
-            {date.toLocaleString()}
-          </Text>
+          <Text style={styles.dateDisplayText}>{date.toLocaleString()}</Text>
         </View>
         {show && (
           <DateTimePicker
@@ -158,12 +156,10 @@ export default function EventForm() {
         {origin && destination && (
           <View style={{ marginTop: 20 }}>
             <Text>
-              Origem: {origin.latitude.toFixed(5)},{" "}
-              {origin.longitude.toFixed(5)}
+              Origem: {origin[0].toFixed(5)}, {origin[1].toFixed(5)}
             </Text>
             <Text>
-              Destino: {destination.latitude.toFixed(5)},{" "}
-              {destination.longitude.toFixed(5)}
+              Destino: {destination[0].toFixed(5)}, {destination[1].toFixed(5)}
             </Text>
           </View>
         )}
