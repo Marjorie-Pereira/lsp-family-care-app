@@ -1,12 +1,8 @@
+import MapRoute from "@/components/MapRoute";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Alert, Button, View } from "react-native";
-import MapView, {
-    LatLng,
-    MapPressEvent,
-    Marker,
-    Polyline,
-} from "react-native-maps";
+import { Alert } from "react-native";
+import { LatLng, MapPressEvent } from "react-native-maps";
 
 export default function SelectRouteScreen() {
   const { id, name, date, eventType } = useLocalSearchParams();
@@ -41,42 +37,10 @@ export default function SelectRouteScreen() {
         id,
         name,
         date,
-        eventType
+        eventType,
       },
     });
   };
 
-  return (
-    <View style={{ flex: 1 }}>
-      <MapView
-        style={{ flex: 1 }}
-        onPress={handleMapPress}
-        initialRegion={{
-          latitude: -23.55052,
-          longitude: -46.633308,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
-      >
-        {origin && (
-          <Marker coordinate={origin} title="Origem" pinColor="green" />
-        )}
-        {destination && (
-          <Marker coordinate={destination} title="Destino" pinColor="red" />
-        )}
-
-        {origin && destination && (
-          <Polyline
-            coordinates={[origin, destination]}
-            strokeColor="#000"
-            strokeWidth={3}
-          />
-        )}
-      </MapView>
-
-      <View style={{ position: "absolute", bottom: 40, alignSelf: "center" }}>
-        <Button title="Confirmar Rota" onPress={handleConfirm} />
-      </View>
-    </View>
-  );
+  return <MapRoute />;
 }
