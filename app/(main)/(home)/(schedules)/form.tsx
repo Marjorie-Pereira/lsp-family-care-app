@@ -141,10 +141,11 @@ export default function FormScreen() {
           onValueChange={(itemValue: string) => {
             setFamilyMemberId(itemValue);
           }}
+          dropdownIconColor={'#000'}
         >
           {familyMembers.map((member, index) => {
             return (
-              <Picker.Item label={member.name} value={member.id} key={index} />
+              <Picker.Item label={member.name} value={member.id} key={index} color="#000" />
             );
           })}
         </Picker>

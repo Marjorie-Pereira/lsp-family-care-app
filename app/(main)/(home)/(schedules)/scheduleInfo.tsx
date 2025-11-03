@@ -167,7 +167,7 @@ export default function ScheduleInfo() {
                           [item.id]: newValue,
                         }));
                       }}
-                      color={isChecked ? "#4630EB" : undefined}
+                      color={isChecked ? theme.colors.primary : undefined}
                       style={{padding: 10}}
                     />
                     <Text
