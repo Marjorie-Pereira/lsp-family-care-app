@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import TravelMapView from "@/components/TravelMapView";
-import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
+import { token } from "@/constants/mapbox.public.token";
 import { eventType } from "@/types/event.type";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const TravelDetails = () => {
     const [lng, lat] = coordinates;
 
     const resp = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxPublicToken}&language=pt-BR`
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${token}&language=pt-BR`
     );
     const data = await resp.json();
 
