@@ -70,16 +70,6 @@ export default function MapRoute({
     if (start && end) fetchRoute(start, end);
   }, [start, end]);
 
-  async function handleSearchStart() {
-    const coords = await getCoordinates(startInput);
-    if (coords) setStart(coords);
-  }
-
-  async function handleSearchEnd() {
-    const coords = await getCoordinates(endInput);
-    if (coords) setEnd(coords);
-  }
-
   const defaultCenter = [-46.6333, -23.5505]; // São Paulo fallback
 
   return (
