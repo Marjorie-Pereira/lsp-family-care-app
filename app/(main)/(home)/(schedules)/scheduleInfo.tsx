@@ -6,7 +6,14 @@ import { scheduleType } from "@/types/scheduleType.type";
 import { Checkbox } from "expo-checkbox";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import {
   CalendarProvider,
   LocaleConfig,
@@ -84,6 +91,37 @@ export default function ScheduleInfo() {
     }
   };
 
+  const deleteEvent = async (eventId: number) => {
+    const {data, error} = await supabase.from("Events").delete().eq('id', eventId);
+
+    if(error) {
+      Alert.alert(error.message);
+    } else {
+      fetchEvents();
+    }
+  }
+
+  const onCompleteEvent = (event: eventType, isComplete: boolean) => {
+    Alert.alert("Confirmar", `Deseja mesmo completar este evento?`, [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Completar",
+        style: "destructive",
+        onPress: () => {
+          setCompleteEvents((prev) => ({
+            ...prev,
+            [event.id]: isComplete,
+          }));
+
+          setTimeout(() => {
+            deleteEvent(event.id);
+           
+          }, 500)
+        },
+      },
+    ]);
+  };
+
   const selectedDayEvents =
     events.filter((ev) => {
       return ev?.event_date.toString().split("T")[0] === selected;
@@ -155,20 +193,18 @@ export default function ScheduleInfo() {
                 "pt-br",
                 { hour: "2-digit", minute: "2-digit" }
               );
-              const isChecked = completeEvents[item.id as keyof typeof completeEvents] || false;
+              const isChecked =
+                completeEvents[item.id as keyof typeof completeEvents] || false;
               return (
                 <Pressable onPress={() => router.push(`./event/${item.id}`)}>
                   <View style={styles.evento}>
                     <Checkbox
                       value={isChecked}
                       onValueChange={(newValue) => {
-                        setCompleteEvents((prev) => ({
-                          ...prev,
-                          [item.id]: newValue,
-                        }));
+                        onCompleteEvent(item, newValue);
                       }}
                       color={isChecked ? theme.colors.primary : undefined}
-                      style={{padding: 10}}
+                      style={{ padding: 10 }}
                     />
                     <Text
                       style={[styles.eventoTexto, isChecked && styles.complete]}
