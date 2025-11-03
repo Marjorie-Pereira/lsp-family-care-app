@@ -3,6 +3,7 @@ import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
 import { eventType } from "@/types/event.type";
 import { scheduleType } from "@/types/scheduleType.type";
+import { Checkbox } from "expo-checkbox";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
@@ -68,6 +69,7 @@ export default function ScheduleInfo() {
   const hoje = new Date().toISOString().split("T")[0];
   const [selected, setSelected] = useState(hoje);
   const [events, setEvents] = useState<eventType[]>([]);
+  const [completeEvents, setCompleteEvents] = useState({});
 
   const fetchEvents = async () => {
     const { data, error } = await supabase
@@ -149,12 +151,35 @@ export default function ScheduleInfo() {
             data={selectedDayEvents}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => {
-              const eventTime = new Date(item.event_date).toLocaleString('pt-br', {hour: '2-digit', minute: '2-digit'});
+              const eventTime = new Date(item.event_date).toLocaleString(
+                "pt-br",
+                { hour: "2-digit", minute: "2-digit" }
+              );
+              const isChecked = completeEvents[item.id as keyof typeof completeEvents] || false;
               return (
                 <Pressable onPress={() => router.push(`./event/${item.id}`)}>
                   <View style={styles.evento}>
-                    <Text style={styles.eventoTexto}>{item.name}</Text>
-                    <Text style={styles.eventoTexto}>{eventTime}</Text>
+                    <Checkbox
+                      value={isChecked}
+                      onValueChange={(newValue) => {
+                        setCompleteEvents((prev) => ({
+                          ...prev,
+                          [item.id]: newValue,
+                        }));
+                      }}
+                      color={isChecked ? "#4630EB" : undefined}
+                      style={{padding: 10}}
+                    />
+                    <Text
+                      style={[styles.eventoTexto, isChecked && styles.complete]}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={[styles.eventoTexto, isChecked && styles.complete]}
+                    >
+                      {eventTime}
+                    </Text>
                   </View>
                 </Pressable>
               );
@@ -214,8 +239,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     elevation: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   eventoTexto: {
     fontSize: 16,
@@ -238,6 +263,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: -0.5, height: 3.5 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
+  },
+  complete: {
+    textDecorationStyle: "solid",
+    textDecorationLine: "line-through",
+    color: theme.colors.primary,
   },
 });
 
