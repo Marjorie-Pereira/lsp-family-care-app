@@ -4,7 +4,7 @@ import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
 import { eventType } from "@/types/event.type";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Linking, Platform, StyleSheet, Text, View } from "react-native";
 
 const TravelDetails = () => {
   const { name, travel_start, travel_end, event_date } =
@@ -50,6 +50,32 @@ const TravelDetails = () => {
     console.log(startLocation, endLocation);
   }, []);
 
+  async function openGoogleMaps(start: any[], end: any[]) {
+    const [startLng, startLat] = start;
+    const [endLng, endLat] = end;
+
+    const origin = `${startLat},${startLng}`;
+    const destination = `${endLat},${endLng}`;
+
+    const url = Platform.select({
+      ios: `comgooglemaps://?saddr=${origin}&daddr=${destination}&directionsmode=driving`,
+      android: `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`,
+    });
+
+    try {
+      const supported = await Linking.canOpenURL(url as string);
+      if (supported) {
+        await Linking.openURL(url as string);
+      } else {
+        await Linking.openURL(
+          `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
+        );
+      }
+    } catch (err) {
+      console.error("Erro ao abrir Google Maps:", err);
+    }
+  }
+
   return (
     <View style={{ flex: 1, padding: 15 }}>
       <TravelMapView travelInfo={travelInfo} />
@@ -70,7 +96,13 @@ const TravelDetails = () => {
         <Text style={{ fontWeight: "600" }}>Destino: </Text>
         <Text>{endLocation}</Text>
 
-        <Button title="Iniciar Viagem" buttonStyle={{ marginTop: 10 }} />
+        <Button
+          title="Iniciar Viagem"
+          buttonStyle={{ marginTop: 10 }}
+          onPress={() =>
+            openGoogleMaps(travelInfo.travel_start, travelInfo.travel_end)
+          }
+        />
       </View>
     </View>
   );
