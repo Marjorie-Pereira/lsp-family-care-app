@@ -37,7 +37,14 @@ export default function EventForm() {
     }
     const { data, error } = await supabase
       .from("Events")
-      .insert({ name, type: eventType, event_date: date, schedule_id: id });
+      .insert({
+        name,
+        type: eventType,
+        event_date: date,
+        schedule_id: id,
+        travel_start: origin,
+        travel_end: destination,
+      });
 
     if (error) {
       Alert.alert("Erro ao criar evento", error.message);
@@ -70,8 +77,8 @@ export default function EventForm() {
 
   useEffect(() => {
     if (params.origin && params.destination) {
-      setOrigin(JSON.parse(params.origin as string));
-      setDestination(JSON.parse(params.destination as string));
+      setOrigin(params.origin);
+      setDestination(params.destination);
     }
   }, []);
 
@@ -152,17 +159,6 @@ export default function EventForm() {
           textStyle={styles.buttonSecondaryText}
           hasShadow={false}
         />
-
-        {origin && destination && (
-          <View style={{ marginTop: 20 }}>
-            <Text>
-              Origem: {origin[0].toFixed(5)}, {origin[1].toFixed(5)}
-            </Text>
-            <Text>
-              Destino: {destination[0].toFixed(5)}, {destination[1].toFixed(5)}
-            </Text>
-          </View>
-        )}
 
         <Button
           title="Criar Evento"
