@@ -1,12 +1,15 @@
 import TrackerInfoHeader from "@/components/TrackerInfoHeader";
 import TravelCard from "@/components/TravelCard";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { supabase } from "@/lib/supabase";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { Alert, FlatList, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const RASTREADOR_INFO = {
-  id: 'rastreador-01',
-  nome: 'Meu Carro',
-  status: 'Online', // Pode ser 'Online', 'Offline', 'Economia'
+  id: "rastreador-01",
+  nome: "Meu Carro",
+  status: "Online", // Pode ser 'Online', 'Offline', 'Economia'
   bateria: 85,
   ultimaLocalizacao: {
     latitude: -23.55052,
@@ -14,36 +17,35 @@ const RASTREADOR_INFO = {
   },
 };
 
-const VIAGENS_PROGRAMADAS = [
-  {
-    id: 'v1',
-    destino: 'Levar na creche',
-    data: new Date('2025-10-28T08:00:00'),
-    status: 'Programada',
-  },
-  {
-    id: 'v2',
-    destino: 'Levar no Pediatra',
-    data: new Date('2025-11-05T10:30:00'),
-    status: 'Programada',
-  },
-  {
-    id: 'v3',
-    destino: 'Vacina',
-    data: new Date('2025-10-24T18:00:00'),
-    status: 'Concluída',
-  },
-];
-
 const TravelTab = () => {
+  const [travels, setTravels] = useState<any[]>([]);
+
+  async function fetchTravels() {
+    const { data, error } = await supabase
+      .from("Events")
+      .select("*")
+      .eq("type", "Viagem");
+
+    if (error) {
+      Alert.alert(error.message);
+    } else {
+      setTravels(data);
+      console.log(data);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTravels();
+    }, [])
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <FlatList
-        data={VIAGENS_PROGRAMADAS}
+        data={travels}
         keyExtractor={(item) => item.id}
-        
         ListHeaderComponent={<TrackerInfoHeader info={RASTREADOR_INFO} />}
-        
         renderItem={({ item }) => <TravelCard viagem={item} />}
         ListEmptyComponent={
           <Text style={styles.listaVazia}>Nenhuma viagem programada.</Text>
@@ -59,18 +61,17 @@ export default TravelTab;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f0f2f5', // Um fundo cinza claro
+    backgroundColor: "#f0f2f5", // Um fundo cinza claro
   },
   listaContainer: {
     paddingHorizontal: 15,
     paddingBottom: 20,
   },
- 
+
   listaVazia: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 30,
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
 });
-
