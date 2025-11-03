@@ -1,51 +1,112 @@
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
-import MapBoxView from "./Map";
-// Importe o decodificador
+import { travelType } from "@/app/(main)/(home)/travels/travelDetails";
+import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
+import {
+  Camera,
+  LineLayer,
+  MapView,
+  PointAnnotation,
+  ShapeSource,
+} from "@rnmapbox/maps";
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
-const TravelMapView = ({ info }: any) => {
-  // Estado para armazenar as coordenadas da rota
-  const [rota, setRota] = useState<any[]>([]);
-  // Referência para o componente MapView
-  const mapRef = useRef<any>(null);
+const TravelMapView = ({ travelInfo }: { travelInfo: travelType }) => {
+  const { travel_start, travel_end } = travelInfo;
+  const [route, setRoute] = useState(null);
 
-  // Ponto de origem (do rastreador)
-  const origem = info.ultimaLocalizacao;
-  // Ponto de destino (vamos pegar a primeira viagem programada)
-  const destino = { latitude: -22.9068, longitude: -43.1729 }; // Coordenadas do Rio de Janeiro
-
-  // useEffect para buscar a rota (SEU CÓDIGO - ESTÁ CORRETO)
-  useEffect(() => {
-    const buscarRota = async () => {};
-
-    if (origem) {
-      // Boa prática: garantir que a origem existe antes de buscar
-      buscarRota();
+  async function fetchRoute(startCoords: any[], endCoords: any[]) {
+    if (!startCoords || !endCoords) return;
+    const resp = await fetch(
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${startCoords.join(
+        ","
+      )};${endCoords.join(
+        ","
+      )}?geometries=geojson&access_token=${mapboxPublicToken}`
+    );
+    const data = await resp.json();
+    if (data.routes?.length > 0) {
+      setRoute(data.routes[0].geometry);
     }
-  }, [origem]); // Dependa da 'origem' para refazer a busca se ela mudar
+  }
 
-  // --- PARTE FALTANTE: O JSX DE RENDERIZAÇÃO ---
-  return <MapBoxView />;
+  useEffect(() => {
+    if (travel_start && travel_end) {
+      fetchRoute(travel_start, travel_end);
+    }
+  }, [travelInfo]);
+
+  const defaultCenter = [-46.6333, -23.5505];
+  return (
+    <View style={styles.mapaContainer}>
+      <MapView style={{ flex: 1 }}>
+        <Camera
+          zoomLevel={10}
+          centerCoordinate={
+            (travel_start && travel_start.length === 2 && travel_start) ||
+            (travel_end && travel_end.length === 2 && travel_end) ||
+            defaultCenter
+          }
+        />
+
+        {travel_start &&
+          Array.isArray(travel_start) &&
+          travel_start.length === 2 && (
+            <PointAnnotation id="start" coordinate={travel_start}>
+              <View style={styles.markerStart} />
+            </PointAnnotation>
+          )}
+
+        {travel_end && Array.isArray(travel_end) && travel_end.length === 2 && (
+          <PointAnnotation id="end" coordinate={travel_end}>
+            <View style={styles.markerEnd} />
+          </PointAnnotation>
+        )}
+
+        {route && (
+          <ShapeSource
+            id="routeSource"
+            shape={{ type: "Feature", geometry: route, properties: {} }}
+          >
+            <LineLayer
+              id="routeFill"
+              style={{
+                lineColor: "#007AFF",
+                lineWidth: 4,
+                lineCap: "round",
+                lineJoin: "round",
+              }}
+            />
+          </ShapeSource>
+        )}
+      </MapView>
+    </View>
+  );
 };
 
 export default TravelMapView;
-// ... (Resto do código: ViagemCard, ViagensScreen, Estilos)
 
-// --- ATUALIZE OS ESTILOS ---
 const styles = StyleSheet.create({
-  // ... (todos os estilos anteriores)
-  headerContainer: {
-    padding: 15,
-  },
   mapaContainer: {
-    height: 250, // Aumentei um pouco a altura para a rota
+    height: 250,
     borderRadius: 12,
     overflow: "hidden",
     backgroundColor: "#e0e0e0",
     elevation: 5,
   },
-  mapa: {
-    ...StyleSheet.absoluteFillObject,
+  markerStart: {
+    width: 16,
+    height: 16,
+    backgroundColor: "green",
+    borderRadius: 8,
+    borderColor: "white",
+    borderWidth: 2,
   },
-  // ... (resto dos estilos)
+  markerEnd: {
+    width: 16,
+    height: 16,
+    backgroundColor: "red",
+    borderRadius: 8,
+    borderColor: "white",
+    borderWidth: 2,
+  },
 });
