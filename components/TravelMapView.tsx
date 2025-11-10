@@ -1,5 +1,5 @@
 import { travelType } from "@/app/(main)/(home)/travels/travelDetails";
-import { token } from "@/constants/mapbox.public.token";
+import { token } from "@/mapbox.public.token";
 import {
   Camera,
   LineLayer,

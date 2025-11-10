@@ -1,4 +1,4 @@
-import { token } from "@/constants/mapbox.public.token";
+import { token } from "@/mapbox.public.token";
 import Mapbox from "@rnmapbox/maps";
 import { StyleSheet, View } from "react-native";
 

@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import TravelMapView from "@/components/TravelMapView";
-import { token } from "@/constants/mapbox.public.token";
+import { token } from "@/mapbox.public.token";
 import { eventType } from "@/types/event.type";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
