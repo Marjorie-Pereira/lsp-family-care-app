@@ -1,8 +1,8 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import ScreenWrapper from "@/components/ScreenWrapper";
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";

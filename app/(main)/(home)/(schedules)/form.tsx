@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import { theme } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { familyMemberType } from "@/types/familyMember.type";
 import { Picker } from "@react-native-picker/picker";
 import { decode } from "base64-arraybuffer";

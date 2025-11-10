@@ -1,6 +1,6 @@
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { eventType } from "@/types/event.type";
 import { scheduleType } from "@/types/scheduleType.type";
 import { Checkbox } from "expo-checkbox";

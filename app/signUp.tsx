@@ -18,8 +18,8 @@ import ViewIconSlash from "../assets/icons/ViewIconSlash";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import ScreenWrapper from "../components/ScreenWrapper";
-import { theme } from "../constants/theme";
 import { supabase } from "../lib/supabase";
+import { theme } from "../theme";
 
 const SignUp = () => {
   const router = useRouter();

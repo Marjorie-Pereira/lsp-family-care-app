@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
-import { theme } from "../constants/theme";
+import { theme } from "../theme";
 
 const Input = ({ ...props }) => {
   return (

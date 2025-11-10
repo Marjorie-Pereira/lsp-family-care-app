@@ -1,4 +1,4 @@
-import { theme } from '@/constants/theme'
+import { theme } from '@/theme'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Loading from './Loading'
 const Button = ({

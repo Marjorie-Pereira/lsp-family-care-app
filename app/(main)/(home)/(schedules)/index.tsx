@@ -1,5 +1,5 @@
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { scheduleType } from "@/types/scheduleType.type";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Stack, useFocusEffect, useNavigation, useRouter } from "expo-router";
