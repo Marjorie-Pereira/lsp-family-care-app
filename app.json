@@ -27,7 +27,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "googleServicesFile": "./android/app/google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
@@ -62,7 +62,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "a6f507f5-e018-44d7-90eb-95c25908ca12"
+        "projectId": "ce96e1e9-089a-4f0a-b5b1-ef46d5f8f5ee"
       }
     }
   }

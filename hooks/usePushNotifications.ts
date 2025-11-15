@@ -1,62 +1,67 @@
+import { useSupabase } from "@/contexts/SupabaseContext";
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useEffect, useRef, useState } from "react";
-
-import Constants from "expo-constants";
-
+import { useRouter } from "expo-router";
+import { useEffect, useRef } from "react";
 import { Platform } from "react-native";
 
-export interface PushNotificationState {
-  expoPushToken?: Notifications.ExpoPushToken;
-  notification?: Notifications.Notification;
-}
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldShowAlert: true,
+  }),
+});
 
-export const usePushNotifications = (): PushNotificationState => {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldPlaySound: false,
-      shouldShowAlert: true,
-      shouldSetBadge: false,
-      shouldShowBanner: false,
-      shouldShowList: false,
-    }),
-  });
+export const usePush = () => {
+  const notificationListener = useRef<Notifications.EventSubscription>(null);
+  const responseListener = useRef<Notifications.EventSubscription>(null);
+  const { setUserPushToken } = useSupabase();
+  const router = useRouter();
 
-  const [expoPushToken, setExpoPushToken] = useState<
-    Notifications.ExpoPushToken | undefined
-  >();
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        if (token) {
+          console.log(token);
+          setUserPushToken!(token);
+        }
+      })
+      .catch((error: any) => console.log("error", error));
 
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >();
+    // Recieved notification
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("recieved notification", notification);
+      });
 
-  const notificationListener =
-    useRef<Notifications.EventSubscription>(undefined);
-  const responseListener = useRef<Notifications.EventSubscription>(undefined);
+    // Tapped on notification
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("Levar até o alimento em questão");
+        // const itemId = response.notification.request.content.data.alimento;
+        //   router.push(`/main/home/item/itemId`);
+      });
+
+    return () => {
+      if (notificationListener.current) {
+        notificationListener.current.remove();
+      }
+      if (responseListener.current) {
+        responseListener.current.remove();
+      }
+    };
+  }, []);
+
+  function handleRegistrationError(errorMessage: string) {
+    alert(errorMessage);
+    throw new Error(errorMessage);
+  }
 
   async function registerForPushNotificationsAsync() {
-    let token;
-    if (Device.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification");
-        return;
-      }
-
-      token = await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig?.extra?.eas.projectId,
-      });
-    } else {
-      alert("Must be using a physical device for Push notifications");
-    }
-
     if (Platform.OS === "android") {
       Notifications.setNotificationChannelAsync("default", {
         name: "default",
@@ -66,35 +71,41 @@ export const usePushNotifications = (): PushNotificationState => {
       });
     }
 
-    return token;
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        handleRegistrationError(
+          "Permission not granted to get push token for push notification!"
+        );
+        return;
+      }
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        handleRegistrationError("Project ID not found");
+      }
+      try {
+        const pushTokenString = (
+          await Notifications.getExpoPushTokenAsync({
+            projectId,
+          })
+        ).data;
+        console.log(pushTokenString);
+        return pushTokenString;
+      } catch (e: unknown) {
+        handleRegistrationError(`${e}`);
+      }
+    } else {
+      handleRegistrationError(
+        "Must use physical device for push notifications"
+      );
+    }
   }
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
-    });
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
-
-    return () => {
-      notificationListener.current?.remove();
-      responseListener.current?.remove();
-
-      notificationListener.current?.remove();
-      responseListener.current?.remove();
-    };
-  }, []);
-
-  return {
-    expoPushToken,
-    notification,
-  };
 };
