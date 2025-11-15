@@ -1,5 +1,5 @@
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { eventType } from "@/types/event.type";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";

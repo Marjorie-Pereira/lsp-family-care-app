@@ -1,4 +1,4 @@
-import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
+import { token } from "@/mapbox.public.token";
 import Mapbox, {
   Camera,
   LineLayer,
@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./Button";
 
-Mapbox.setAccessToken(mapboxPublicToken);
+Mapbox.setAccessToken(token);
 
 export default function MapRoute({
   onConfirmRoute,
@@ -31,7 +31,7 @@ export default function MapRoute({
     const resp = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         query
-      )}.json?access_token=${mapboxPublicToken}&limit=1`
+      )}.json?access_token=${token}&limit=1`
     );
     const data = await resp.json();
     if (data?.features?.length > 0) {
@@ -45,7 +45,7 @@ export default function MapRoute({
     const resp = await fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         query
-      )}.json?autocomplete=true&language=pt-BR&limit=5&access_token=${mapboxPublicToken}`
+      )}.json?autocomplete=true&language=pt-BR&limit=5&access_token=${token}`
     );
     const data = await resp.json();
     return data.features || [];
@@ -58,7 +58,7 @@ export default function MapRoute({
         ","
       )};${endCoords.join(
         ","
-      )}?geometries=geojson&access_token=${mapboxPublicToken}`
+      )}?geometries=geojson&access_token=${token}`
     );
     const data = await resp.json();
     if (data.routes?.length > 0) {
@@ -77,6 +77,7 @@ export default function MapRoute({
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Ponto de partida"
+          placeholderTextColor={"#7a7a7aff"}
           style={styles.input}
           value={startInput}
           onFocus={() => setIsSelectingStart(true)}
@@ -89,6 +90,7 @@ export default function MapRoute({
 
         <TextInput
           placeholder="Destino"
+          placeholderTextColor={"#7a7a7aff"}
           style={styles.input}
           value={endInput}
           onFocus={() => setIsSelectingStart(false)}

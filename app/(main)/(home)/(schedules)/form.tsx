@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
-import { theme } from "@/constants/theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { familyMemberType } from "@/types/familyMember.type";
 import { Picker } from "@react-native-picker/picker";
 import { decode } from "base64-arraybuffer";
@@ -141,10 +141,11 @@ export default function FormScreen() {
           onValueChange={(itemValue: string) => {
             setFamilyMemberId(itemValue);
           }}
+          dropdownIconColor={'#000'}
         >
           {familyMembers.map((member, index) => {
             return (
-              <Picker.Item label={member.name} value={member.id} key={index} />
+              <Picker.Item label={member.name} value={member.id} key={index} color="#000" />
             );
           })}
         </Picker>

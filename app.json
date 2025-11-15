@@ -4,27 +4,30 @@
     "slug": "family-care-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/img/splash-icon.png",
+    "icon": "./assets/img/logo.png",
     "scheme": "familycareapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.croon",
+      "config": {
+        "googleMapsApiKey": "AIzaSyC5nmeM5e4zyw9gBPOCqVV0HVa0wKAVZKA"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/img/splash-icon.png",
-        "backgroundImage": "./assets/img/splash-icon.png",
-        "monochromeImage": "./assets/img/splash-icon.png"
+        "foregroundImage": "./assets/img/logo.png",
+        "backgroundImage": "./assets/img/logo.png",
+        "monochromeImage": "./assets/img/logo.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "config": {
-        "googleMaps": {
-          "apiKey": ""
-        }
-      }
+      "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
       "output": "static",
@@ -35,7 +38,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/img/splash-icon.png",
+          "image": "./assets/img/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -55,6 +58,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a6f507f5-e018-44d7-90eb-95c25908ca12"
+      }
     }
   }
 }

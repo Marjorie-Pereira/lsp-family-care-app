@@ -1,5 +1,5 @@
 import { travelType } from "@/app/(main)/(home)/travels/travelDetails";
-import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
+import { token } from "@/mapbox.public.token";
 import {
   Camera,
   LineLayer,
@@ -21,7 +21,7 @@ const TravelMapView = ({ travelInfo }: { travelInfo: travelType }) => {
         ","
       )};${endCoords.join(
         ","
-      )}?geometries=geojson&access_token=${mapboxPublicToken}`
+      )}?geometries=geojson&access_token=${token}`
     );
     const data = await resp.json();
     if (data.routes?.length > 0) {

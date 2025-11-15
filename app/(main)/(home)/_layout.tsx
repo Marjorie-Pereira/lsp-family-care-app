@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Tabs } from "expo-router";

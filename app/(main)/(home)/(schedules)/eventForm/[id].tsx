@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { router, useLocalSearchParams } from "expo-router";
@@ -132,10 +132,11 @@ export default function EventForm() {
           }}
           style={styles.picker}
           selectedValue={(params.eventType as string) ?? ""}
+          dropdownIconColor={'#000'}
         >
-          <Picker.Item label={"Viagem"} value={"Viagem"} />
-          <Picker.Item label={"Medicação"} value={"Medicacao"} />
-          <Picker.Item label={"Outro"} value={"Outro"} />
+          <Picker.Item label={"Viagem"} value={"Viagem"} color='#000' />
+          <Picker.Item label={"Medicação"} value={"Medicacao"} color='#000' />
+          <Picker.Item label={"Outro"} value={"Outro"} color='#000' />
         </Picker>
 
         <Button

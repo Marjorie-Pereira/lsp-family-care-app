@@ -1,8 +1,8 @@
-import { mapboxPublicToken } from "@/constants/mapboxPublicKey";
+import { token } from "@/mapbox.public.token";
 import Mapbox from "@rnmapbox/maps";
 import { StyleSheet, View } from "react-native";
 
-Mapbox.setAccessToken(mapboxPublicToken);
+Mapbox.setAccessToken(token);
 
 export default function MapBoxView() {
   return (

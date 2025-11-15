@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { familyMemberType } from "@/types/familyMember.type";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import ScreenWrapper from "@/components/ScreenWrapper";
-import { theme } from "@/constants/theme";
+import { theme } from "@/theme";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {

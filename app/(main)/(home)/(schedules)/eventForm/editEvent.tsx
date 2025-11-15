@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import { theme } from "@/theme";
 import { eventCategory, eventType } from "@/types/event.type";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -8,12 +8,12 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export default function EditEventForm() {

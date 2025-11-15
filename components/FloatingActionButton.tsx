@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/theme";
 import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   SharedValue,

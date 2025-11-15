@@ -1,4 +1,4 @@
-import { theme } from "@/constants/theme";
+import { theme } from "@/theme";
 import { eventType } from "@/types/event.type";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
