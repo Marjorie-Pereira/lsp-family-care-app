@@ -46,5 +46,6 @@ app-example
 
 # supabase
 /constants/*
+.temp
 
-splash-icon.png
+**/.npmrc

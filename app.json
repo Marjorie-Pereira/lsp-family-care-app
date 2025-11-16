@@ -19,6 +19,7 @@
       }
     },
     "android": {
+      "package": "com.croon",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/img/logo.png",
@@ -53,7 +54,8 @@
           "RNMapboxMapsImpl": "mapbox",
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWFyam9yaWVwZXJlaXJhIiwiYSI6ImNtaGk1YzNzejB6emoyanBxOXJrM21hcGYifQ.zc4zvue6tb7MC9Na3uVhCg"
         }
-      ]
+      ],
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -62,8 +64,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ce96e1e9-089a-4f0a-b5b1-ef46d5f8f5ee"
+        "projectId": "a7470cce-e60d-45cb-a054-641f7b2b25e6"
       }
-    }
+    },
+    "owner": "marjorie_pereira"
   }
 }
