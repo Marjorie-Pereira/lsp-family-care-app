@@ -49,3 +49,4 @@ app-example
 .temp
 
 **/.npmrc
+*.code-workspace
