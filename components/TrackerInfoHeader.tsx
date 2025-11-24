@@ -6,11 +6,11 @@ interface TrackerInfoHeaderProps {
   info: trackerInfo;
 }
 const TrackerInfoHeader = ({ info }: TrackerInfoHeaderProps) => {
-  // const getStatusStyle = () => {
-  //   return info.status === "Online"
-  //     ? [styles.statusTexto, styles.statusOnline]
-  //     : [styles.statusTexto, styles.statusOffline];
-  // };
+  const getStatusStyle = () => {
+    return info?.rssi && info.rssi >= -80
+      ? [styles.statusTexto, styles.statusOnline]
+      : [styles.statusTexto, styles.statusOffline];
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -27,7 +27,9 @@ const TrackerInfoHeader = ({ info }: TrackerInfoHeaderProps) => {
             size={20}
             color="#333"
           />
-          {/* <Text style={getStatusStyle()}>{info.status}</Text> */}
+          <Text style={[styles.statusTexto, styles.statusOnline]}>
+            Sinal {info.rssi}
+          </Text>
         </View>
         <View style={styles.statusLinha}>
           <MaterialCommunityIcons name="battery-80" size={20} color="#333" />
