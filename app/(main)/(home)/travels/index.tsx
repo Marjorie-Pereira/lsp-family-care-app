@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import TrackerInfoHeader from "@/components/TrackerInfoHeader";
 import TravelCard from "@/components/TravelCard";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { parseHolyIOTServiceData } from "@/utils/parseHolyIOTServiceData";
 import { requestBlePermissions } from "@/utils/requestBlePermissions";
@@ -27,6 +28,7 @@ const TravelTab = () => {
   const [scannedDevice, setScannedDevice] = useState<Device | null>(null);
   const [deviceInfo, setDeviceInfo] = useState<trackerInfo | null>(null);
   let bleManager: BleManager = new BleManager();
+  const { user } = useAuth();
 
   async function fetchTravels() {
     const { data, error } = await supabase
@@ -119,6 +121,12 @@ const TravelTab = () => {
                         name: scannedDevice.name,
                         rssi: scannedDevice.rssi,
                       });
+
+                      saveDevice({
+                        ...info,
+                        name: scannedDevice.name,
+                        rssi: scannedDevice.rssi,
+                      });
                     },
                   },
                   {
@@ -134,6 +142,18 @@ const TravelTab = () => {
     );
 
     // if (scannedDevice) Alert.alert("Encontrado", scannedDevice.name as string);
+  }
+
+  async function saveDevice(info: trackerInfo) {
+    const { extra, ...rest } = info;
+    console.log(rest);
+    const { error } = await supabase
+      .from("Devices")
+      .insert({ ...rest, user_id: user?.id });
+    if (error) {
+      Alert.alert(error.message);
+      console.error(error);
+    }
   }
 
   // async function updateDeviceInfo() {
