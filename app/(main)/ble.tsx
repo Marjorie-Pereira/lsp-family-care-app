@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import { theme } from "@/theme";
 import { parseHolyIOTServiceData } from "@/utils/parseHolyIOTServiceData";
+import { requestBlePermissions } from "@/utils/requestBlePermissions";
 import { Buffer } from "buffer";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -55,10 +56,16 @@ const BleScanScreen = () => {
     bleManager.stopDeviceScan();
   }
   // Function to start scanning BLE devices
-  function startScanning() {
+  async function startScanning() {
     // The first parameter is the UUIDs of services (null if you want to scan all devices)
     // Second parameter - scanning options
     // The third parameter is a callback called when a device is detected
+    const ok = await requestBlePermissions();
+
+    if (!ok) {
+      console.log("❌ Permissões BLE não concedidas");
+      return;
+    }
     console.log("scanning...");
 
     bleManager.startDeviceScan(null, null, (error, scannedDevice) => {
