@@ -44,7 +44,6 @@ const TravelTab = () => {
   useFocusEffect(
     useCallback(() => {
       fetchTravels();
-      updateDeviceInfo();
     }, [])
   );
 
@@ -53,31 +52,28 @@ const TravelTab = () => {
   }, [travels, deviceInfo]);
 
   function stopScanning() {
-    bleManager.stopDeviceScan();
+    return bleManager.stopDeviceScan();
   }
 
   async function startScanning() {
-    console.log("now scanning");
-    bleManager
-      .startDeviceScan(
-        null,
-        { allowDuplicates: false },
-        (error, scannedDevice) => {
-          console.log("device detected");
-          if (error) {
-            console.warn(error);
-            return;
-          }
-
-          if (scannedDevice && scannedDevice.name === NAME) {
-            console.log(scannedDevice);
-            setScannedDevice(scannedDevice);
-            stopScanning();
-            return;
-          }
+    console.log("now scanning!!!");
+    const manager = new BleManager();
+    manager.startDeviceScan(
+      null,
+      { allowDuplicates: false },
+      (error, scannedDevice) => {
+        console.log("device detected");
+        if (error) {
+          console.warn(error);
+          return;
         }
-      )
-      .then((_res) => console.log(scannedDevice));
+
+        if (scannedDevice && scannedDevice.name === NAME) {
+          console.log(scannedDevice);
+          setScannedDevice(scannedDevice);
+        }
+      }
+    );
   }
 
   async function pairDevice() {
@@ -88,67 +84,93 @@ const TravelTab = () => {
       return;
     }
 
-    await startScanning().then((_res) => {
-      if (scannedDevice) {
-        Alert.alert(
-          "Dispositivo encontrado",
-          `Parear com ${scannedDevice.name}?`,
-          [
-            {
-              text: "Confirmar",
-              onPress: () => {
-                const serviceData =
-                  scannedDevice?.serviceData?.[
-                    "00005242-0000-1000-8000-00805f9b34fb"
-                  ];
-                if (!serviceData) return;
+    const manager = new BleManager();
+    manager.startDeviceScan(
+      null,
+      { allowDuplicates: false },
+      (error, scannedDevice) => {
+        console.log("device detected");
+        if (error) {
+          console.warn(error);
+          return;
+        }
 
-                const info = parseHolyIOTServiceData(serviceData);
-                setDeviceInfo({
-                  ...info,
-                  name: scannedDevice.name,
-                  rssi: scannedDevice.rssi,
-                });
-              },
-            },
-            {
-              text: "Cancelar",
-              onPress: () => null,
-            },
-          ]
-        );
+        if (scannedDevice && scannedDevice.name === NAME) {
+          console.log(scannedDevice);
+          setScannedDevice(scannedDevice);
+          stopScanning().then((_res) => {
+            if (scannedDevice) {
+              Alert.alert(
+                "Dispositivo encontrado",
+                `Parear com ${scannedDevice.name}?`,
+                [
+                  {
+                    text: "Confirmar",
+                    onPress: () => {
+                      const serviceData =
+                        scannedDevice?.serviceData?.[
+                          "00005242-0000-1000-8000-00805f9b34fb"
+                        ];
+                      if (!serviceData) return;
+
+                      const info = parseHolyIOTServiceData(serviceData);
+                      setDeviceInfo({
+                        ...info,
+                        name: scannedDevice.name,
+                        rssi: scannedDevice.rssi,
+                      });
+                    },
+                  },
+                  {
+                    text: "Cancelar",
+                    onPress: () => null,
+                  },
+                ]
+              );
+            }
+          });
+        }
       }
-    });
+    );
+
     // if (scannedDevice) Alert.alert("Encontrado", scannedDevice.name as string);
   }
 
-  async function updateDeviceInfo() {
-    if (!scannedDevice || !deviceInfo) return;
-    console.log("updating device info");
+  // async function updateDeviceInfo() {
+  //   console.log(scannedDevice);
+  //   if (!scannedDevice || !deviceInfo) return;
+  //   console.log("updating device info of", scannedDevice.id);
 
-    await scannedDevice?.discoverAllServicesAndCharacteristics();
-    const services = await scannedDevice?.services();
-    console.log(services);
+  //   const connectedDevice = await bleManager.connectToDevice(scannedDevice.id);
+  //   await connectedDevice.discoverAllServicesAndCharacteristics();
+  //   const services = await connectedDevice.services();
 
-    // bleManager.startDeviceScan(null, null, (error, scannedDevice) => {
-    //   if (error) {
-    //     console.warn(error);
-    //     return;
-    //   }
+  //   const uuids = services.map((service, index) => {
+  //     if(index != 1) return service.uuid
+  //   });
 
-    //   if (scannedDevice && scannedDevice.name === NAME) {
-    //     const serviceData =
-    //       scannedDevice.serviceData?.["00005242-0000-1000-8000-00805f9b34fb"];
-    //     if (!serviceData) return;
+  //   console.log(uuids);
 
-    //     const info = parseHolyIOTServiceData(serviceData);
+  //   bleManager.startDeviceScan(uuids, null, (error, scannedDevice) => {
+  //     console.log("scanning");
+  //     if (error) {
+  //       console.warn(error);
+  //       return;
+  //     }
 
-    //     setScannedDevice(scannedDevice);
-    //     setDeviceInfo(info);
-    //     stopScanning();
-    //   }
-    // });
-  }
+  //     if (scannedDevice && scannedDevice.name === NAME) {
+  //       console.log(scannedDevice);
+  //       const serviceData =
+  //         scannedDevice.serviceData?.["00005242-0000-1000-8000-00805f9b34fb"];
+  //       if (!serviceData) return;
+
+  //       const info = parseHolyIOTServiceData(serviceData);
+
+  //       setDeviceInfo({ ...deviceInfo, batteryPercent: info.batteryPercent });
+  //       stopScanning();
+  //     }
+  //   });
+  // }
 
   return (
     <>
