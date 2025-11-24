@@ -27,6 +27,7 @@ const TravelTab = () => {
   const [travels, setTravels] = useState<any[]>([]);
   const [scannedDevice, setScannedDevice] = useState<Device | null>(null);
   const [deviceInfo, setDeviceInfo] = useState<trackerInfo | null>(null);
+  const [userDevice, setUserDevice] = useState();
   let bleManager: BleManager = new BleManager();
   const { user } = useAuth();
 
@@ -43,39 +44,33 @@ const TravelTab = () => {
     }
   }
 
+  async function fetchDevice() {
+    const { data, error } = await supabase
+      .from("Devices")
+      .select("*")
+      .eq("user_id", user?.id);
+
+    if (error) {
+      Alert.alert(error.message);
+    } else {
+      setUserDevice(data[0]);
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchTravels();
+      fetchDevice();
     }, [])
   );
 
   useEffect(() => {
     bleManager = new BleManager();
-  }, [travels, deviceInfo]);
+    console.log(userDevice);
+  }, [travels, deviceInfo, userDevice]);
 
   function stopScanning() {
     return bleManager.stopDeviceScan();
-  }
-
-  async function startScanning() {
-    console.log("now scanning!!!");
-    const manager = new BleManager();
-    manager.startDeviceScan(
-      null,
-      { allowDuplicates: false },
-      (error, scannedDevice) => {
-        console.log("device detected");
-        if (error) {
-          console.warn(error);
-          return;
-        }
-
-        if (scannedDevice && scannedDevice.name === NAME) {
-          console.log(scannedDevice);
-          setScannedDevice(scannedDevice);
-        }
-      }
-    );
   }
 
   async function pairDevice() {
@@ -194,8 +189,8 @@ const TravelTab = () => {
 
   return (
     <>
-      {deviceInfo ? (
-        <TrackerInfoHeader info={deviceInfo as trackerInfo} />
+      {userDevice ? (
+        <TrackerInfoHeader info={userDevice as trackerInfo} />
       ) : (
         <View style={styles.container}>
           <Text style={styles.tituloSecao}>Nenhum dispositivo encontrado</Text>
