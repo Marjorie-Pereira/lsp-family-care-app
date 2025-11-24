@@ -1,45 +1,25 @@
+import { trackerInfo } from "@/app/(main)/(home)/travels";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
-import MapBoxView from "./Map";
 
-const TrackerInfoHeader = ({ info }: any) => {
-  const getStatusStyle = () => {
-    return info.status === "Online"
-      ? [styles.statusTexto, styles.statusOnline]
-      : [styles.statusTexto, styles.statusOffline];
-  };
+interface TrackerInfoHeaderProps {
+  info: trackerInfo;
+}
+const TrackerInfoHeader = ({ info }: TrackerInfoHeaderProps) => {
+  // const getStatusStyle = () => {
+  //   return info.status === "Online"
+  //     ? [styles.statusTexto, styles.statusOnline]
+  //     : [styles.statusTexto, styles.statusOffline];
+  // };
 
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.tituloSecao}>Meu Rastreador</Text>
 
-      <View style={styles.mapaContainer}>
-        {/* <MapView
-          style={styles.mapa}
-          
-          initialRegion={{
-            latitude: info.ultimaLocalizacao.latitude,
-            longitude: info.ultimaLocalizacao.longitude,
-            latitudeDelta: 0.01, 
-            longitudeDelta: 0.01, 
-          }}
-        //   scrollEnabled={false}
-          // zoomEnabled={false}
-        >
-          
-          <Marker
-            coordinate={info.ultimaLocalizacao}
-            title={info.nome}
-            description={`Bateria: ${info.bateria}%`}
-          />
-        </MapView> */}
-        <MapBoxView />
-      </View>
-
       <View style={styles.statusCard}>
         <View style={styles.statusLinha}>
           <MaterialCommunityIcons name="car-connected" size={22} color="#333" />
-          <Text style={styles.statusNome}>{info.nome}</Text>
+          <Text style={styles.statusNome}>{info?.name}</Text>
         </View>
         <View style={styles.statusLinha}>
           <MaterialCommunityIcons
@@ -47,17 +27,15 @@ const TrackerInfoHeader = ({ info }: any) => {
             size={20}
             color="#333"
           />
-          <Text style={getStatusStyle()}>{info.status}</Text>
+          {/* <Text style={getStatusStyle()}>{info.status}</Text> */}
         </View>
         <View style={styles.statusLinha}>
           <MaterialCommunityIcons name="battery-80" size={20} color="#333" />
-          <Text style={styles.statusTexto}>{info.bateria}% Bateria</Text>
+          <Text style={styles.statusTexto}>
+            {info?.batteryPercent}% Bateria
+          </Text>
         </View>
       </View>
-
-      <Text style={[styles.tituloSecao, { marginTop: 20 }]}>
-        Viagens Programadas
-      </Text>
     </View>
   );
 };
@@ -65,26 +43,13 @@ const TrackerInfoHeader = ({ info }: any) => {
 const styles = StyleSheet.create({
   headerContainer: {
     marginBottom: 10,
+    paddingHorizontal: 15,
   },
   tituloSecao: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#111",
     marginVertical: 15,
-  },
-  mapaContainer: {
-    height: 200,
-    borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "#e0e0e0",
-  },
-  mapa: {
-    ...StyleSheet.absoluteFillObject,
-  },
-
-  mapaTexto: {
-    color: "#666",
-    fontSize: 16,
   },
   statusCard: {
     backgroundColor: "#ffffff",

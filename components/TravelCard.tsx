@@ -24,8 +24,6 @@ const TravelCard = ({ viagem }: { viagem: eventType }) => {
     return [styles.statusViagemPill, styles.statusOutro];
   };
 
-  console.log("viagem info", viagem);
-
   return (
     <TouchableOpacity
       style={styles.cardViagem}
