@@ -149,6 +149,7 @@ const TravelTab = () => {
       Alert.alert(error.message);
       console.error(error);
     }
+    fetchDevice();
   }
 
   // async function updateDeviceInfo() {
