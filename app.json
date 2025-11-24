@@ -28,13 +28,17 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
       "favicon": ""
     },
     "plugins": [
+      "react-native-ble-plx",
       "expo-router",
       [
         "expo-splash-screen",
@@ -56,6 +60,7 @@
         }
       ],
       "expo-notifications"
+      // "react-native-beacons-manager"
     ],
     "experiments": {
       "typedRoutes": true,
